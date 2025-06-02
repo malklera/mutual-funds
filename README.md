@@ -24,9 +24,12 @@ put all that data to a .json file, and make the program read from it.
 Make a program to download the specific content that I want instead of html from each page.
 Only get the first result I get, some of the field are repeated below the one I want.
 Which data I want?
+Name
+Url
+Risk
+Value []float64
 I have to check that the name I give and the one display on the page are the same.
-Name of fund from json file:
-Read throught the list of keys from the json, each key is the name of one fund.
+
 Name display on the page:
 
 <h1
@@ -36,11 +39,13 @@ Name display on the page:
 Name fund
 </h1>
 
-Compare that the "Name fund" is the same of the key from the json, i actually access
-each url by the id, if the website change the relation id/fund i need to know.
+Compare that the "Name fund" is the same of the one from the json,
+if the website change the relation url/fund I need to know.
 Only show something if they are not the same.
 
-Risk? But only the first time, this do not change
+Risk? But only the first time, this do not change, or did it change? i do not know,
+I will check each time, if the risk is diferent from the json, i update it, deal
+with the risk not existing the first time i run the program
 <p
   data-testid="fundRiskDetailName"
   class="sc-aXZVg hLnzCR sc-gRtvSG bydNqC"
@@ -55,7 +60,10 @@ Cuotapartes
 >
   $ 14.563,697
 </h3>
-Save as a string first, later I will deal with converting it to a float.
+Get ride of "$ " and convert the rest to a float64, see how go deal with "." and ",",
+this will appended to the slices if it already exist or initialize the first run
+I just thought of something, i want to know when i get the value, the value slice has to
+be a map instead, where i have date and value
 
 Another where I put the downloaded content to an actual data structure, check
 what type of data structure I want to use.
