@@ -14,7 +14,7 @@ This is not necessary
 
 I tried to get the specifics url from each element of the table from:
 https://www.santander.com.ar/personas/inversiones/informacion-fondos#/
-But i run into problems, only the first url gets saved, maybe in the future i will try
+But I run into problems, only the first url gets saved, maybe in the future I will try
 by doing it from chromedp instead of strait js from the console of devtools.
 
 New approach:
@@ -22,20 +22,23 @@ Manually get the id, name, and complete url of each mutual fund available on the
 put all that data to a .json file, and make the program read from it.
 
 Make a program to download the specific content that I want instead of html from each page.
-Only get the first result i get, some of the field are repeated below the one i want.
-Which data i want?
-I have to check that the name i give and the one display on the page are the same.
+Only get the first result I get, some of the field are repeated below the one I want.
+Which data I want?
+I have to check that the name I give and the one display on the page are the same.
 Name of fund from json file:
 Read throught the list of keys from the json, each key is the name of one fund.
 Name display on the page:
+
 <h1
-data-testid="titleDetailDesktop"
-class="sc-aXZVg jbWCFw sc-dISpDn dlSiwb"
+  data-testid="titleDetailDesktop"
+  class="sc-aXZVg jbWCFw sc-dISpDn dlSiwb"
 >
 Name fund
 </h1>
+
 Compare that the "Name fund" is the same of the key from the json, i actually access
 each url by the id, if the website change the relation id/fund i need to know.
+Only show something if they are not the same.
 
 Risk? But only the first time, this do not change
 <p
@@ -45,7 +48,14 @@ Risk? But only the first time, this do not change
   Type
 </p>
 
-
+Cuotapartes
+<h3
+  data-testid="currentShareValueType"
+  class="sc-aXZVg dMxiJX"
+>
+  $ 14.563,697
+</h3>
+Save as a string first, later I will deal with converting it to a float.
 
 Another where I put the downloaded content to an actual data structure, check
 what type of data structure I want to use.

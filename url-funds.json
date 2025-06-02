@@ -1,44 +1,58 @@
-{
-  "1": {
-    "name": "Superfondo Acciones"
+[
+  {
+    "name": "Superfondo Acciones",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/1"
   },
-  "2": {
-    "name": "Superfondo Renta $"
+  {
+    "name": "Superfondo Renta $",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/2"
   },
-  "6": {
-    "name": "Super Ahorro $"
+  {
+    "name": "Super Ahorro $",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/6"
   },
-  "9": {
-    "name": "Superfondo Acciones Brasil cuota C"
+  {
+    "name": "Superfondo Acciones Brasil cuota C",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/9"
   },
-  "12": {
-    "name": "Superfondo Renta Variable"
+  {
+    "name": "Superfondo Renta Variable",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/12"
   },
-  "16": {
-    "name": "Super Bonos"
+  {
+    "name": "Super Bonos",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/16"
   },
-  "17": {
-    "name": "Supergestión cuota C"
+  {
+    "name": "Supergestión cuota C",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/17"
   },
-  "18": {
-    "name": "Superfondo Renta Fija"
+  {
+    "name": "Superfondo Renta Fija",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/18"
   },
-  "19": {
-    "name": "Superfondo Latinoamérica cuota C"
+  {
+    "name": "Superfondo Latinoamérica cuota C",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/19"
   },
-  "27": {
-    "name": "Supergestión Balanceado cuota C"
+  {
+    "name": "Supergestión Balanceado cuota C",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/27"
   },
-  "44": {
-    "name": "Supergestión MIX VI"
+  {
+    "name": "Supergestión MIX VI",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/44"
   },
-  "49": {
-    "name": "Super Ahorro Plus"
+  {
+    "name": "Super Ahorro Plus",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/49"
   },
-  "59": {
-    "name": "Superfondo Combinado"
+  {
+    "name": "Superfondo Combinado",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/59"
   },
-  "64": {
-    "name": "Supergestión"
+  {
+    "name": "Supergestión",
+    "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/64"
   }
-}
+]
