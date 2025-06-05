@@ -6,13 +6,14 @@ import (
 )
 
 func main() {
-	switch {
-	case len(os.Args) == 1:
+	switch len(os.Args) {
+	case 1:
 		// Show the menu here
-	case len(os.Args) == 2:
+		fmt.Println("The menu")
+	case 2:
 		if os.Args[1] == "-u" {
-			// Run saveValues()
-			fmt.Println("The argument is:", os.Args[1])
+			createFundsFile(file)
+			saveValues()
 		} else {
 			fmt.Println("Wrong argument:", os.Args[1])
 		}

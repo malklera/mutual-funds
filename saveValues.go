@@ -86,8 +86,8 @@ func getInfo(fund Fund) Fund {
 
 	if resName != fund.Name {
 		log.Printf("Error with url:\n%s\n", fund.Url)
-		log.Println("Name of fund has changed.")
-		log.Fatalln(err)
+		log.Fatalf("Name of fund has changed: %v", err)
+		// TODO: Take me modify mutual fund, so i can update the name
 	}
 
 	if resRisk != fund.Risk {

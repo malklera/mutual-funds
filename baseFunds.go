@@ -1,4 +1,26 @@
-[
+package main
+
+import (
+	"log"
+	"os"
+)
+
+// NOTE: Where do i call this?
+// Each time before calling saveValues?
+func createFundsFile(path string) {
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		err := os.WriteFile(path, baseFundsJson, 0644)
+		if err != nil {
+			log.Fatalf("Failed to create base funds.json: %v", err)
+		}
+	}
+}
+
+// TODO: Make the same but creating an empty myFunds.json where i will have the
+// list of mutual funds the user owns
+
+var baseFundsJson = []byte(`[
   {
     "name": "Superfondo Acciones",
     "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/1"
@@ -55,4 +77,4 @@
     "name": "Supergestión",
     "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/64"
   }
-]
+]`)
