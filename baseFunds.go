@@ -7,18 +7,17 @@ import (
 
 // NOTE: Where do i call this?
 // Each time before calling saveValues?
-func createFundsFile(path string) {
+func createBaseFile(path string, baseContentJson []byte) {
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		err := os.WriteFile(path, baseFundsJson, 0644)
+		err := os.WriteFile(path, baseContentJson, 0644)
 		if err != nil {
-			log.Fatalf("Failed to create base funds.json: %v", err)
+			log.Fatalf("Failed to create base %s: %v", path, err)
 		}
 	}
 }
 
-// TODO: Make the same but creating an empty myFunds.json where i will have the
-// list of mutual funds the user owns
+var baseMyFundsJson = []byte(`[]`)
 
 var baseFundsJson = []byte(`[
   {

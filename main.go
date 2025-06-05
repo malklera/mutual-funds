@@ -5,6 +5,11 @@ import (
 	"os"
 )
 
+const (
+	fundsFile  = "funds.json"
+	myFundsFile = "myFunds.json"
+)
+
 func main() {
 	switch len(os.Args) {
 	case 1:
@@ -12,7 +17,8 @@ func main() {
 		fmt.Println("The menu")
 	case 2:
 		if os.Args[1] == "-u" {
-			createFundsFile(file)
+			createBaseFile(fundsFile, baseFundsJson)
+			createBaseFile(myFundsFile, baseMyFundsJson)
 			saveValues()
 		} else {
 			fmt.Println("Wrong argument:", os.Args[1])
