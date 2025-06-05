@@ -71,11 +71,11 @@ func optionsMenu(file string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				showData(file)
+				menuShow(file)
 			case "2":
-				exportData(file)
+				menuExport(file)
 			case "3":
-				modifyData(file)
+				menuModify(file)
 			case "4":
 				return
 			default:
@@ -87,9 +87,9 @@ func optionsMenu(file string) {
 	}
 }
 
-func showData(file string) {
+func menuShow(file string) {
 	for {
-		fmt.Println("1- showData")
+		fmt.Println("1- Show data")
 		fmt.Println("2- Back")
 
 		opt, err := reader.ReadString('\n')
@@ -97,8 +97,9 @@ func showData(file string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				fmt.Println("showing data")
+				showData(file)
 			case "2":
+				// TODO: once everything work erase this print
 				fmt.Println("going back")
 				return
 			default:
@@ -108,15 +109,11 @@ func showData(file string) {
 			fmt.Printf("Error reading input: %v", err)
 		}
 	}
-
-	// TODO: Do the actual showing of the data using the file string, that is
-	// going to tell me if i show myFunds or funds, the first iteration will be
-	// plain fmt.Print of json, later on will i think about actual graphics
 }
 
-func exportData(file string) {
+func menuExport(file string) {
 	for {
-		fmt.Println("1- exportData")
+		fmt.Println("1- Export data")
 		fmt.Println("2- Back")
 
 		opt, err := reader.ReadString('\n')
@@ -139,9 +136,9 @@ func exportData(file string) {
 	// first option will be a .json file, later on maybe other options
 }
 
-func modifyData(file string) {
+func menuModify(file string) {
 	for {
-		fmt.Println("1- modifyData")
+		fmt.Println("1- Modify data")
 		fmt.Println("2- Back")
 
 		opt, err := reader.ReadString('\n')

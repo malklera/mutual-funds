@@ -5,8 +5,6 @@ import (
 	"os"
 )
 
-// NOTE: Where do i call this?
-// Each time before calling saveValues?
 func createBaseFile(path string, baseContentJson []byte) {
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {

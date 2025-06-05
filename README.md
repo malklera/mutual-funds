@@ -106,7 +106,7 @@ if the slice is empty the options below act upon the whole funds.json, if the sl
 non empty show and export will go through funds.json and only grab the ones in the
 slice, on modify instead it will modify my-funds.json instead
 
-TODO: The same way i create the first .json file, i have to create this myFunds.json
+DONE: The same way i create the first .json file, i have to create this myFunds.json
 file the first time empty
 
 + Show data.
@@ -127,9 +127,19 @@ file the first time empty
 Add the capability to save data persistently, update the data, and retrieve it.
 This is done, what i have to do is actually showing the data, but first finish the menu
 and its options.
+DONE: menu()
+
+Work on each operation for the data, show, export, modify
+
 
 Download the data of all mutual funds, that way i can keep track of which one yield
 the best, keep separate from the ones the user actually own.
+DONE
+
+TODO: Check if the cuantity of share i own increase with time or what
+
+TODO: Manage all the errors, i want to go back a menu or retry on all of then,
+leave this for last
 
 After all that work, read if it is possible to save login data to compare my tracking
 with the one generate by the website, only if I can encrypt my login data, and use it
