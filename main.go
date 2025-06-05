@@ -13,8 +13,7 @@ const (
 func main() {
 	switch len(os.Args) {
 	case 1:
-		// Show the menu here
-		fmt.Println("The menu")
+		menu()
 	case 2:
 		if os.Args[1] == "-u" {
 			createBaseFile(fundsFile, baseFundsJson)

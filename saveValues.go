@@ -27,7 +27,6 @@ const (
 	name  = `[data-testid="titleDetailDesktop"]`
 	risk  = `[data-testid="fundRiskDetailName"]`
 	value = `[data-testid="currentShareValueType"]`
-	file  = "funds.json"
 )
 
 func saveValues() {
@@ -37,22 +36,22 @@ func saveValues() {
 		log.Fatalf("Error marshaling json from funds: %v", err)
 	}
 
-	err = os.WriteFile(file, updatedFunds, 0666)
+	err = os.WriteFile(fundsFile, updatedFunds, 0666)
 	if err != nil {
-		log.Fatalf("Error writing file %s: %v", file, err)
+		log.Fatalf("Error writing file %s: %v", fundsFile, err)
 	}
 }
 
 func updateValues() []Fund {
-	data, err := os.ReadFile(file)
+	data, err := os.ReadFile(fundsFile)
 	if err != nil {
-		log.Fatalf("Error reading file %s: %v", file, err)
+		log.Fatalf("Error reading file %s: %v", fundsFile, err)
 	}
 
 	var funds []Fund
 	err = json.Unmarshal(data, &funds)
 	if err != nil {
-		log.Fatalf("Error unmarshaling file %s: %v", file, err)
+		log.Fatalf("Error unmarshaling file %s: %v", fundsFile, err)
 	}
 
 	var newFunds []Fund
