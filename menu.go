@@ -22,9 +22,9 @@ func menu() {
 		if err == nil {
 			switch {
 			case opt == "1":
-				optionsMenu(myFundsFile)
+				optionsMenu("myFunds")
 			case opt == "2":
-				optionsMenu(fundsFile)
+				optionsMenu("all")
 			case opt == "3":
 				innerFor := true
 				for innerFor {
@@ -106,6 +106,7 @@ func menuShow(choosenFunds string) {
 		// about how to show the data
 		fmt.Println("1- Show data")
 		fmt.Println("2- Back")
+		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
@@ -139,6 +140,7 @@ func menuExport(file string) {
 		// NOTE: Leave the menu for future options about how to export it
 		fmt.Println("1- Export data")
 		fmt.Println("2- Back")
+		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
@@ -172,8 +174,11 @@ func menuModify(choosenFunds string) {
 			fmt.Println(choosenFunds)
 		}
 
-		fmt.Println("1- Modify data")
-		fmt.Println("2- Back")
+		fmt.Println("1- Modify fund")
+		fmt.Println("2- Add fund")
+		fmt.Println("3- Delete fund")
+		fmt.Println("4- Back")
+		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
@@ -183,6 +188,11 @@ func menuModify(choosenFunds string) {
 				// TODO: Show the options, i am doing it on the tmp version
 				fmt.Println("modifying data")
 			case "2":
+				fmt.Println("adding fund")
+			case "3":
+				fmt.Println("deleting fund")
+			case "4":
+				// TODO: Erase fmt when i see this working properly
 				fmt.Println("going back")
 				return
 			default:
@@ -196,3 +206,45 @@ func menuModify(choosenFunds string) {
 	// TODO: This is difficult, ading a new fund should be easy, actually changing
 	// or erasing a fund is more diffucult i think
 }
+
+func subMenuModify(choosenFunds string) {
+	showData(choosenFunds)
+	fmt.Print("\nOperating over ")
+	switch choosenFunds {
+	case myFundsFile:
+		fmt.Println("my funds")
+	case fundsFile:
+		fmt.Println("all funds")
+	default:
+		fmt.Println(choosenFunds)
+	}
+
+	for {
+		if choosenFunds == "myFunds" || choosenFunds == "all" {
+			fmt.Println("Which fund do you whish to modify? (input its name)")
+			fmt.Println("1- Back")
+		} else {
+			fmt.Println("Confirm (y/n):")
+		}
+		fmt.Print("> ")
+
+		opt, err := reader.ReadString('\n')
+		opt = strings.TrimSuffix(opt, "\n")
+		if err == nil {
+			if opt == "1" {
+				return
+			} else {
+				// TODO: I have to confirm that the choosen option exist
+				if fundExist(opt) {
+					// TODO: call modifyData(choosenFunds) here
+					fmt.Println("modifying:", opt)
+				} else {
+					fmt.Printf("Fund do not exist: %s", opt)
+				}
+			}
+		} else {
+			fmt.Printf("Error reading input: %v", err)
+		}
+	}
+}
+
