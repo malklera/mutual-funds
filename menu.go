@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"log"
 )
 
 var reader = bufio.NewReader(os.Stdin)
@@ -22,9 +23,9 @@ func menu() {
 		if err == nil {
 			switch {
 			case opt == "1":
-				optionsMenu("myFunds")
+				optionsMenu(myFundsFile)
 			case opt == "2":
-				optionsMenu("all")
+				optionsMenu(fundsFile)
 			case opt == "3":
 				innerFor := true
 				for innerFor {
@@ -55,10 +56,10 @@ func menu() {
 	}
 }
 
-func optionsMenu(choosenFile string) {
+func optionsMenu(context string) {
 	for {
 		fmt.Print("Operating over ")
-		if choosenFile == myFundsFile {
+		if context == myFundsFile {
 			fmt.Println("my funds")
 		} else {
 			fmt.Println("all funds")
@@ -75,11 +76,11 @@ func optionsMenu(choosenFile string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				menuShow(choosenFile)
+				menuShow(context)
 			case "2":
-				menuExport(choosenFile)
+				menuExport(context)
 			case "3":
-				menuModify(choosenFile)
+				menuModify(context)
 			case "4":
 				return
 			default:
@@ -91,16 +92,16 @@ func optionsMenu(choosenFile string) {
 	}
 }
 
-func menuShow(choosenFunds string) {
+func menuShow(context string) {
 	for {
 		fmt.Print("Operating over ")
-		switch choosenFunds {
+		switch context {
 		case myFundsFile:
 			fmt.Println("my funds")
 		case fundsFile:
 			fmt.Println("all funds")
 		default:
-			fmt.Println(choosenFunds)
+			fmt.Println(context)
 		}
 		// NOTE: I have this menu because in the future there will be more options
 		// about how to show the data
@@ -113,7 +114,7 @@ func menuShow(choosenFunds string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				showData(choosenFunds)
+				showData(context, context)
 			case "2":
 				// TODO: once everything work erase this print
 				fmt.Println("going back")
@@ -129,10 +130,10 @@ func menuShow(choosenFunds string) {
 
 // NOTE: Think about this later, which options i want here, myFunds, funds, and
 // only one fund??
-func menuExport(file string) {
+func menuExport(context string, choosenFunds string) {
 	for {
 		fmt.Print("Operating over ")
-		if file == "myFunds.json" {
+		if context == myFundsFile {
 			fmt.Println("my funds")
 		} else {
 			fmt.Println("all funds")
@@ -162,16 +163,16 @@ func menuExport(file string) {
 	// first option will be a .json file, later on maybe other options
 }
 
-func menuModify(choosenFunds string) {
+func menuModify(context string) {
 	for {
 		fmt.Print("Operating over ")
-		switch choosenFunds {
+		switch context {
 		case myFundsFile:
 			fmt.Println("my funds")
 		case fundsFile:
 			fmt.Println("all funds")
 		default:
-			fmt.Println(choosenFunds)
+			log.Fatalf("Wrong context: %s", context)
 		}
 
 		fmt.Println("1- Modify fund")
@@ -208,7 +209,8 @@ func menuModify(choosenFunds string) {
 }
 
 func subMenuModify(choosenFunds string) {
-	showData(choosenFunds)
+	// WARN: Check this out, i think the call is wrong
+	showData(choosenFunds, "allFunds")
 	fmt.Print("\nOperating over ")
 	switch choosenFunds {
 	case myFundsFile:
@@ -220,7 +222,7 @@ func subMenuModify(choosenFunds string) {
 	}
 
 	for {
-		if choosenFunds == "myFunds" || choosenFunds == "all" {
+		if choosenFunds == myFundsFile || choosenFunds == fundsFile {
 			fmt.Println("Which fund do you whish to modify? (input its name)")
 			fmt.Println("1- Back")
 		} else {
