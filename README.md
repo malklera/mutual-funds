@@ -130,11 +130,31 @@ and its options.
 DONE: menu()
 
 Work on each operation for the data, show, export, modify
+showData: DONE
 
+modifyData:
+Make a menu for this  part, put it on menu.go
+  What operations can i do here?
+  myFunds.json
+    Add a fund.
+    Delete a fund.
+    Modify a fund.
+      Change name
+      Change shares
 
+  funds.json
+    Add a fund.
+    Delete a fund.
+    Modify a fund.
+      Change name
+      Change url
+
+The other fields the user is not allowed to touch
+      
 Download the data of all mutual funds, that way i can keep track of which one yield
 the best, keep separate from the ones the user actually own.
 DONE
+
 
 TODO: Check if the cuantity of share i own increase with time or what
 

@@ -43,13 +43,10 @@ func menu() {
 							fmt.Println("Wrong option")
 						}
 					} else {
-
 						fmt.Printf("Error reading input: %v", err)
 					}
 				}
-
 			default:
-				fmt.Println("opt:", opt)
 				fmt.Println("Wrong option")
 			}
 		} else {
@@ -58,8 +55,15 @@ func menu() {
 	}
 }
 
-func optionsMenu(file string) {
+func optionsMenu(choosenFile string) {
 	for {
+		fmt.Print("Operating over ")
+		if choosenFile == myFundsFile {
+			fmt.Println("my funds")
+		} else {
+			fmt.Println("all funds")
+		}
+
 		fmt.Println("1- Show data")
 		fmt.Println("2- Export data")
 		fmt.Println("3- Modify data")
@@ -71,11 +75,11 @@ func optionsMenu(file string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				menuShow(file)
+				menuShow(choosenFile)
 			case "2":
-				menuExport(file)
+				menuExport(choosenFile)
 			case "3":
-				menuModify(file)
+				menuModify(choosenFile)
 			case "4":
 				return
 			default:
@@ -87,8 +91,19 @@ func optionsMenu(file string) {
 	}
 }
 
-func menuShow(file string) {
+func menuShow(choosenFunds string) {
 	for {
+		fmt.Print("Operating over ")
+		switch choosenFunds {
+		case myFundsFile:
+			fmt.Println("my funds")
+		case fundsFile:
+			fmt.Println("all funds")
+		default:
+			fmt.Println(choosenFunds)
+		}
+		// NOTE: I have this menu because in the future there will be more options
+		// about how to show the data
 		fmt.Println("1- Show data")
 		fmt.Println("2- Back")
 
@@ -97,7 +112,7 @@ func menuShow(file string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				showData(file)
+				showData(choosenFunds)
 			case "2":
 				// TODO: once everything work erase this print
 				fmt.Println("going back")
@@ -111,8 +126,17 @@ func menuShow(file string) {
 	}
 }
 
+// NOTE: Think about this later, which options i want here, myFunds, funds, and
+// only one fund??
 func menuExport(file string) {
 	for {
+		fmt.Print("Operating over ")
+		if file == "myFunds.json" {
+			fmt.Println("my funds")
+		} else {
+			fmt.Println("all funds")
+		}
+		// NOTE: Leave the menu for future options about how to export it
 		fmt.Println("1- Export data")
 		fmt.Println("2- Back")
 
@@ -136,8 +160,18 @@ func menuExport(file string) {
 	// first option will be a .json file, later on maybe other options
 }
 
-func menuModify(file string) {
+func menuModify(choosenFunds string) {
 	for {
+		fmt.Print("Operating over ")
+		switch choosenFunds {
+		case myFundsFile:
+			fmt.Println("my funds")
+		case fundsFile:
+			fmt.Println("all funds")
+		default:
+			fmt.Println(choosenFunds)
+		}
+
 		fmt.Println("1- Modify data")
 		fmt.Println("2- Back")
 
@@ -146,6 +180,7 @@ func menuModify(file string) {
 		if err == nil {
 			switch opt {
 			case "1":
+				// TODO: Show the options, i am doing it on the tmp version
 				fmt.Println("modifying data")
 			case "2":
 				fmt.Println("going back")
