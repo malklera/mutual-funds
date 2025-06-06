@@ -158,6 +158,9 @@ DONE
 
 TODO: Check if the cuantity of share i own increase with time or what
 
+TODO: Look for the proper way of dealing with user input, the current way works,
+but i do not like it
+
 TODO: Manage all the errors, i want to go back a menu or retry on all of then,
 leave this for last
 

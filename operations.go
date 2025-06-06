@@ -97,3 +97,23 @@ func showData(choosenFunds string) {
 
 	}
 }
+
+func fundExist(fundName string) bool {
+	data, err := os.ReadFile(fundsFile)
+	if err != nil {
+		log.Fatalf("Error reading file %s : %v", fundsFile, err)
+	}
+
+	var funds []Fund
+	err = json.Unmarshal(data, &funds)
+	if err != nil {
+		fmt.Println("Error unmarshaling data:", err)
+	}
+	
+	for _, fund := range(funds) {
+		if fundName == fund.Name {
+			return true
+		}
+	}
+	return false
+}
