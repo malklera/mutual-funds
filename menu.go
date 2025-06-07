@@ -3,16 +3,16 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strings"
-	"log"
 )
 
 var reader = bufio.NewReader(os.Stdin)
 
 func menu() {
 	for {
-		fmt.Println("Mutual funds options, use numbers only(1, 2, 3, etc)")
+		fmt.Println("\nMutual funds options, use numbers only(1, 2, 3, etc)")
 		fmt.Println("1- My funds")
 		fmt.Println("2- All funds")
 		fmt.Println("3- Exit")
@@ -58,7 +58,7 @@ func menu() {
 
 func optionsMenu(context string) {
 	for {
-		fmt.Print("Operating over ")
+		fmt.Print("\nOperating over ")
 		if context == myFundsFile {
 			fmt.Println("my funds")
 		} else {
@@ -76,9 +76,61 @@ func optionsMenu(context string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				menuShow(context)
+				innerFor := true
+				for innerFor {
+					fmt.Println("Do you wish to operate over:")
+					fmt.Println("1- All funds")
+					fmt.Println("2- Back")
+					fmt.Println("- Input the name of a single fund")
+					fmt.Print("> ")
+
+					opt2, err2 := reader.ReadString('\n')
+					opt2 = strings.TrimSuffix(opt2, "\n")
+					if err2 == nil {
+						switch opt2 {
+						case "1":
+							menuShow(context, "allFunds")
+						case "2":
+							innerFor = false
+						default:
+							if fundExist(context, opt2) {
+								menuShow(context, opt2)
+							} else {
+								fmt.Println("Invalid fund name.")
+							}
+						}
+					} else {
+						fmt.Printf("Error reading input: %v", err2)
+					}
+				}
 			case "2":
-				menuExport(context)
+				innerFor := true
+				for innerFor {
+					fmt.Println("Do you wish to operate over:")
+					fmt.Println("1- All funds")
+					fmt.Println("2- Back")
+					fmt.Println("- Input the name of a single fund")
+					fmt.Print("> ")
+
+					opt2, err2 := reader.ReadString('\n')
+					opt2 = strings.TrimSuffix(opt2, "\n")
+					if err2 == nil {
+						switch opt2 {
+						case "1":
+							menuExport(context, "allFunds")
+						case "2":
+							innerFor = false
+						default:
+							if fundExist(context, opt2) {
+								menuExport(context, opt2)
+							} else {
+								fmt.Println("Invalid fund name.")
+							}
+						}
+					} else {
+						fmt.Printf("Error reading input: %v", err2)
+					}
+				}
 			case "3":
 				menuModify(context)
 			case "4":
@@ -92,9 +144,9 @@ func optionsMenu(context string) {
 	}
 }
 
-func menuShow(context string) {
+func menuShow(context string, choosenFunds string) {
 	for {
-		fmt.Print("Operating over ")
+		fmt.Print("\nOperating over ")
 		switch context {
 		case myFundsFile:
 			fmt.Println("my funds")
@@ -114,10 +166,13 @@ func menuShow(context string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				showData(context, context)
+				switch choosenFunds {
+				case "allFunds":
+					showData(context, "allFunds")
+				default:
+					showData(context, choosenFunds)
+				}
 			case "2":
-				// TODO: once everything work erase this print
-				fmt.Println("going back")
 				return
 			default:
 				fmt.Println("Wrong option")
@@ -128,11 +183,9 @@ func menuShow(context string) {
 	}
 }
 
-// NOTE: Think about this later, which options i want here, myFunds, funds, and
-// only one fund??
 func menuExport(context string, choosenFunds string) {
 	for {
-		fmt.Print("Operating over ")
+		fmt.Print("\nOperating over ")
 		if context == myFundsFile {
 			fmt.Println("my funds")
 		} else {
@@ -150,7 +203,6 @@ func menuExport(context string, choosenFunds string) {
 			case "1":
 				fmt.Println("exporting data")
 			case "2":
-				fmt.Println("going back")
 				return
 			default:
 				fmt.Println("Wrong option")
@@ -165,7 +217,7 @@ func menuExport(context string, choosenFunds string) {
 
 func menuModify(context string) {
 	for {
-		fmt.Print("Operating over ")
+		fmt.Print("\nOperating over ")
 		switch context {
 		case myFundsFile:
 			fmt.Println("my funds")
@@ -208,26 +260,22 @@ func menuModify(context string) {
 	// or erasing a fund is more diffucult i think
 }
 
-func subMenuModify(choosenFunds string) {
-	// WARN: Check this out, i think the call is wrong
-	showData(choosenFunds, "allFunds")
+func subMenuModify(context string) {
+	showData(context, "allFunds")
 	fmt.Print("\nOperating over ")
-	switch choosenFunds {
+	switch context {
 	case myFundsFile:
 		fmt.Println("my funds")
 	case fundsFile:
 		fmt.Println("all funds")
 	default:
-		fmt.Println(choosenFunds)
+		fmt.Println(context)
 	}
 
 	for {
-		if choosenFunds == myFundsFile || choosenFunds == fundsFile {
-			fmt.Println("Which fund do you whish to modify? (input its name)")
-			fmt.Println("1- Back")
-		} else {
-			fmt.Println("Confirm (y/n):")
-		}
+		fmt.Println("\nWhich fund do you whish to modify?")
+		fmt.Println("1- Back")
+		fmt.Println("- Input fund name")
 		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
@@ -236,9 +284,8 @@ func subMenuModify(choosenFunds string) {
 			if opt == "1" {
 				return
 			} else {
-				// TODO: I have to confirm that the choosen option exist
-				if fundExist(opt) {
-					// TODO: call modifyData(choosenFunds) here
+				if fundExist(context, opt) {
+					// TODO: call modifyData(context, opt) here
 					fmt.Println("modifying:", opt)
 				} else {
 					fmt.Printf("Fund do not exist: %s", opt)
@@ -249,4 +296,3 @@ func subMenuModify(choosenFunds string) {
 		}
 	}
 }
-
