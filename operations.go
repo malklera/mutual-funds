@@ -15,12 +15,14 @@ type Portfolio struct {
 func showData(context string, choosenFunds string) {
 	data, err := os.ReadFile(fundsFile)
 	if err != nil {
+		// NOTE: i can deal with this error better by retrying or something
 		log.Fatalf("Error reading file %s : %v", fundsFile, err)
 	}
 
 	var funds []Fund
 	err = json.Unmarshal(data, &funds)
 	if err != nil {
+		// NOTE: i can deal with this error better by retrying or something
 		fmt.Println("Error unmarshaling data:", err)
 	}
 
@@ -123,15 +125,17 @@ func showData(context string, choosenFunds string) {
 func fundExist(context string, fundName string) bool {
 	data, err := os.ReadFile(context)
 	if err != nil {
+		// NOTE: i can deal with this error better by retrying or something
 		log.Fatalf("Error reading file %s : %v", context, err)
 	}
 
 	var funds []Fund
 	err = json.Unmarshal(data, &funds)
 	if err != nil {
+		// NOTE: i can deal with this error better by retrying or something
 		fmt.Println("Error unmarshaling data:", err)
 	}
-	
+
 	for _, fund := range(funds) {
 		if fundName == fund.Name {
 			return true
