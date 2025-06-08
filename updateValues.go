@@ -29,25 +29,7 @@ const (
 	value = `[data-testid="currentShareValueType"]`
 )
 
-// TODO: Check if i already run this today after the close of market, if yes abort
-// otherwise continue, where do i check that?, should i get the hour and minute when
-// the data is save instead of only the yyyy/mm/dd ?
-// this is because some days i will run the program at morning and maybe or not
-// at night
-func saveValues() {
-	funds := updateValues()
-	updatedFunds, err := json.MarshalIndent(funds, "", "\t")
-	if err != nil {
-		log.Fatalf("Error marshaling json from funds: %v", err)
-	}
-
-	err = os.WriteFile(fundsFile, updatedFunds, 0666)
-	if err != nil {
-		log.Fatalf("Error writing file %s: %v", fundsFile, err)
-	}
-}
-
-func updateValues() []Fund {
+func updateValues() {
 	data, err := os.ReadFile(fundsFile)
 	if err != nil {
 		log.Fatalf("Error reading file %s: %v", fundsFile, err)
@@ -65,7 +47,15 @@ func updateValues() []Fund {
 		newFunds = append(newFunds, getInfo(fund))
 	}
 
-	return newFunds
+	updatedFunds, err := json.MarshalIndent(newFunds, "", "\t")
+	if err != nil {
+		log.Fatalf("Error marshaling json from funds: %v", err)
+	}
+
+	err = os.WriteFile(fundsFile, updatedFunds, 0666)
+	if err != nil {
+		log.Fatalf("Error writing file %s: %v", fundsFile, err)
+	}
 }
 
 func getInfo(fund Fund) Fund {
@@ -90,7 +80,7 @@ func getInfo(fund Fund) Fund {
 
 	if resName != fund.Name {
 		log.Printf("Error with url:\n%s\n", fund.Url)
-		log.Fatalf("Name of fund has changed: %v", err)
+		log.Printf("Name of fund has changed: %v", err)
 		// TODO: Take me modify mutual fund, so i can update the name
 	}
 
