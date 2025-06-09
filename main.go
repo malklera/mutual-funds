@@ -1,13 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
+	"time"
 )
 
 const (
-	fundsFile   = "funds.json"
-	myFundsFile = "myFunds.json"
+	fundsFile       = "funds.json"
+	myFundsFile     = "myFunds.json"
+	hourCloseMarket = "17:05:00"
 )
 
 func main() {
@@ -16,19 +18,44 @@ func main() {
 		menu()
 	case 2:
 		if os.Args[1] == "-u" {
-			createBaseFile(fundsFile, baseFundsJson)
-			createBaseFile(myFundsFile, baseMyFundsJson)
-			// TODO: Check if i already run this today after the close of market, if yes abort
-			// otherwise continue, where do i check that?, should i get the hour and minute when
-			// the data is save instead of only the yyyy/mm/dd ?
-			// this is because some days i will run the program at morning and maybe or not
-			// at night
 
-			updateValues()
-		} else {
-			fmt.Println("Wrong argument:", os.Args[1])
+			stat, err := os.Stat(fundsFile)
+			if err != nil {
+				log.Fatalf("Error reading the stats of: %s : %v", fundsFile, err)
+			}
+			fileModTime := stat.ModTime()
+			now := time.Now()
+
+			fileModDay := time.Date(fileModTime.Year(), fileModTime.Month(),
+				fileModTime.Day(), 0, 0, 0, 0, fileModTime.Location())
+
+			today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0,
+				now.Location())
+
+			if fileModDay.Before(today) {
+				createBaseFile(fundsFile, baseFundsJson)
+				createBaseFile(myFundsFile, baseMyFundsJson)
+				updateValues()
+			} else {
+				parsedHourCloseMarket, err := time.Parse(time.TimeOnly, hourCloseMarket)
+				if err != nil {
+					log.Fatalf("Error parsing %s : %v", hourCloseMarket, err)
+				}
+
+				marketCloseToday := time.Date(now.Year(), now.Month(), now.Day(),
+					parsedHourCloseMarket.Hour(), parsedHourCloseMarket.Minute(),
+					parsedHourCloseMarket.Second(), 0, now.Location())
+
+				if fileModTime.After(marketCloseToday) {
+					return
+				} else {
+					createBaseFile(fundsFile, baseFundsJson)
+					createBaseFile(myFundsFile, baseMyFundsJson)
+					updateValues()
+				}
+			}
 		}
 	default:
-		fmt.Println("Too many arguments.")
+		log.Println("Too many arguments.")
 	}
 }
