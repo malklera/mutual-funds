@@ -9,7 +9,7 @@ import (
 const (
 	fundsFile       = "funds.json"
 	myFundsFile     = "myFunds.json"
-	hourCloseMarket = "17:00:00"
+	hourCloseMarket = 17
 )
 
 func main() {
@@ -25,37 +25,29 @@ func main() {
 			}
 			fileModTime := stat.ModTime()
 			now := time.Now()
-
 			fileModDay := time.Date(fileModTime.Year(), fileModTime.Month(),
 				fileModTime.Day(), 0, 0, 0, 0, fileModTime.Location())
+			today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 
-			today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0,
-				now.Location())
+			// NOTE: for the future i will like to work with RFC3339 format, i just do
+			// not like the way i would do it now
 
 			if fileModDay.Before(today) {
-				createBaseFile(fundsFile, baseFundsJson)
-				createBaseFile(myFundsFile, baseMyFundsJson)
 				updateValues()
 			} else {
-				parsedHourCloseMarket, err := time.Parse(time.TimeOnly, hourCloseMarket)
-				if err != nil {
-					log.Fatalf("Error parsing %s : %v", hourCloseMarket, err)
-				}
+				closeMarket := time.Date(now.Year(), now.Month(), now.Day(), hourCloseMarket,
+					0, 0, 0, now.Location())
 
-				marketCloseToday := time.Date(now.Year(), now.Month(), now.Day(),
-					parsedHourCloseMarket.Hour(), parsedHourCloseMarket.Minute(),
-					parsedHourCloseMarket.Second(), 0, now.Location())
-
-				if fileModTime.After(marketCloseToday) {
-					return
-				} else {
-					createBaseFile(fundsFile, baseFundsJson)
-					createBaseFile(myFundsFile, baseMyFundsJson)
+				if fileModTime.Before(closeMarket) {
 					updateValues()
+				} else {
+					return
 				}
 			}
+		} else {
+			log.Fatalf("Wrong argument: %s", os.Args[1])
 		}
 	default:
-		log.Println("Too many arguments.")
+		log.Fatalf("Too many arguments.")
 	}
 }
