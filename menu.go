@@ -299,43 +299,7 @@ func subMenuModify(context string) {
 				showData(context, "allFunds")
 			default:
 				if fundExist(context, opt) {
-					// TODO: call modifyData(context, opt) here
-					// change the work of modifyData, it has to receibe context,
-					// nameFund, field to modify, and new value
-					// modifyData(context, nameFund, field, newValue)
-					/*
-					var myFunds []Portfolio
-					myData, err := os.ReadFile(myFundsFile)
-					if err != nil {
-						log.Fatalf("Error reading file %s : %v", myFundsFile, err)
-					}
-					err = json.Unmarshal(myData, &myFunds)
-					if err != nil {
-						log.Fatalf("Error unmarshaling myFunds: %v", err)
-					}
-
-					innerFor := true
-					for _, myFund := range myFunds {
-						if opt == myFund.Name {
-							fmt.Println("Name:", myFund.Name)
-							fmt.Println("Owned shares:", myFund.Shares)
-							// cant change the name, that is done over fundsFile
-							fmt.Println("New ammount of owned shares:")
-							fmt.Print("> ")
-
-							newShares, err := reader.ReadString('\n')
-							newShares = strings.TrimSuffix(newShares, "\n")
-
-							if err != nil {
-								// conver input into float, check for error, pass all needed info to modifyData
-
-							} else {
-								log.Printf("Error reading input: %v", err)
-							}
-
-						}
-					}
-					*/
+					modifyData(context, opt)
 				} else {
 					fmt.Printf("Fund do not exist: %s", opt)
 				}

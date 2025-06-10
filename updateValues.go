@@ -32,13 +32,13 @@ const (
 func updateValues() {
 	data, err := os.ReadFile(fundsFile)
 	if err != nil {
-		log.Fatalf("Error reading file %s: %v", fundsFile, err)
+		log.Fatalf("Error reading file %s : %v", fundsFile, err)
 	}
 
 	var funds []Fund
 	err = json.Unmarshal(data, &funds)
 	if err != nil {
-		log.Fatalf("Error unmarshaling file %s: %v", fundsFile, err)
+		log.Fatalf("Error unmarshaling file %s : %v", fundsFile, err)
 	}
 
 	var newFunds []Fund
@@ -54,7 +54,7 @@ func updateValues() {
 
 	err = os.WriteFile(fundsFile, updatedFunds, 0666)
 	if err != nil {
-		log.Fatalf("Error writing file %s: %v", fundsFile, err)
+		log.Fatalf("Error writing file %s : %v", fundsFile, err)
 	}
 }
 
