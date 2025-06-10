@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -15,18 +16,29 @@ func menu() {
 		fmt.Println("\nMutual funds options, use numbers only(1, 2, 3, etc)")
 		fmt.Println("1- My funds")
 		fmt.Println("2- All funds")
-		fmt.Println("3- Exit")
+		fmt.Println("3- Create base files")
+		fmt.Println("4- Update values")
+		fmt.Println("5- Exit")
 		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
 		if err == nil {
-			switch {
-			case opt == "1":
+			switch opt {
+			case "1":
 				optionsMenu(myFundsFile)
-			case opt == "2":
+			case "2":
 				optionsMenu(fundsFile)
-			case opt == "3":
+			case "3":
+				path, err := os.Getwd()
+				if err != nil {
+					log.Printf("Error getting path: %v", err)
+				}
+				createBaseFile(filepath.Join(path, fundsFile), baseFundsJson)
+				createBaseFile(filepath.Join(path, myFundsFile), baseMyFundsJson)
+			case "4":
+				updateValues()
+			case "5":
 				innerFor := true
 				for innerFor {
 					fmt.Println("You sure want to exit? y/n")
@@ -184,6 +196,9 @@ func menuShow(context string, choosenFunds string) {
 }
 
 func menuExport(context string, choosenFunds string) {
+	// TODO: Give options of exporting to a place on the pc choosen by the user
+	// first option will be a .json file, later on maybe other options
+
 	for {
 		fmt.Print("\nOperating over ")
 		if context == myFundsFile {
@@ -211,8 +226,6 @@ func menuExport(context string, choosenFunds string) {
 			fmt.Printf("Error reading input: %v", err)
 		}
 	}
-	// TODO: Give options of exporting to a place on the pc choosen by the user
-	// first option will be a .json file, later on maybe other options
 }
 
 func menuModify(context string) {
@@ -238,15 +251,16 @@ func menuModify(context string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				// TODO: Show the options, i am doing it on the tmp version
-				fmt.Println("modifying data")
+				subMenuModify(context)
 			case "2":
+				// TODO: do the subMenuAdd(context) function and the actual
+				// adding function on operations
 				fmt.Println("adding fund")
 			case "3":
+				// TODO: do the subMenuDelete(context) function and the actual
+				// deleting function on operations
 				fmt.Println("deleting fund")
 			case "4":
-				// TODO: Erase fmt when i see this working properly
-				fmt.Println("going back")
 				return
 			default:
 				fmt.Println("Wrong option")
@@ -255,13 +269,9 @@ func menuModify(context string) {
 			fmt.Printf("Error reading input: %v", err)
 		}
 	}
-
-	// TODO: This is difficult, ading a new fund should be easy, actually changing
-	// or erasing a fund is more diffucult i think
 }
 
 func subMenuModify(context string) {
-	showData(context, "allFunds")
 	fmt.Print("\nOperating over ")
 	switch context {
 	case myFundsFile:
@@ -273,20 +283,59 @@ func subMenuModify(context string) {
 	}
 
 	for {
-		fmt.Println("\nWhich fund do you whish to modify?")
+		fmt.Println("\nWhat do you wish to do?")
 		fmt.Println("1- Back")
-		fmt.Println("- Input fund name")
+		fmt.Println("2- Show funds")
+		fmt.Println("- Input fund name to modify")
 		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
 		if err == nil {
-			if opt == "1" {
+			switch opt {
+			case "1":
 				return
-			} else {
+			case "2":
+				showData(context, "allFunds")
+			default:
 				if fundExist(context, opt) {
 					// TODO: call modifyData(context, opt) here
-					fmt.Println("modifying:", opt)
+					// change the work of modifyData, it has to receibe context,
+					// nameFund, field to modify, and new value
+					// modifyData(context, nameFund, field, newValue)
+					/*
+					var myFunds []Portfolio
+					myData, err := os.ReadFile(myFundsFile)
+					if err != nil {
+						log.Fatalf("Error reading file %s : %v", myFundsFile, err)
+					}
+					err = json.Unmarshal(myData, &myFunds)
+					if err != nil {
+						log.Fatalf("Error unmarshaling myFunds: %v", err)
+					}
+
+					innerFor := true
+					for _, myFund := range myFunds {
+						if opt == myFund.Name {
+							fmt.Println("Name:", myFund.Name)
+							fmt.Println("Owned shares:", myFund.Shares)
+							// cant change the name, that is done over fundsFile
+							fmt.Println("New ammount of owned shares:")
+							fmt.Print("> ")
+
+							newShares, err := reader.ReadString('\n')
+							newShares = strings.TrimSuffix(newShares, "\n")
+
+							if err != nil {
+								// conver input into float, check for error, pass all needed info to modifyData
+
+							} else {
+								log.Printf("Error reading input: %v", err)
+							}
+
+						}
+					}
+					*/
 				} else {
 					fmt.Printf("Fund do not exist: %s", opt)
 				}
