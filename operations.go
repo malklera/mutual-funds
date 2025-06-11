@@ -2,12 +2,12 @@ package main
 
 import (
 	"bufio"
-	"strings"
-	"strconv"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 type Portfolio struct {
@@ -297,6 +297,7 @@ func modifyData(context string, fundName string) {
 }
 
 func addData(context string, nameFund string) {
+	var reader = bufio.NewReader(os.Stdin)
 	switch context {
 	case fundsFile:
 		fund := Fund{Name: nameFund}
@@ -379,6 +380,91 @@ func addData(context string, nameFund string) {
 			log.Fatalf("Error writing file %s : %v", myFundsFile, err)
 		}
 
+	default:
+		log.Fatalf("Wrong context: %s", context)
+	}
+}
+
+func deleteData(context string, nameFund string) {
+	var reader = bufio.NewReader(os.Stdin)
+	confirmation := true
+	for confirmation {
+		fmt.Printf("DANGER: Are you sure you want to delete '%s' from '%s'?(y/n)", nameFund, context)
+		fmt.Print("> ")
+
+		opt, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Printf("Error reading input: %s", err)
+		} else {
+			opt = strings.TrimSuffix(opt, "\n")
+			switch opt {
+			case "y", "Y":
+				confirmation = false
+			case "n", "N":
+				return
+			default:
+				fmt.Println("Wrong option")
+			}
+		}
+	}
+
+	switch context {
+	case fundsFile:
+		var funds []Fund
+		data, err := os.ReadFile(fundsFile)
+		if err != nil {
+			log.Fatalf("Error reading file %s : %v", fundsFile, err)
+		}
+		err = json.Unmarshal(data, &funds)
+		if err != nil {
+			log.Fatalf("Error unmarshaling funds: %v", err)
+		}
+
+		var newFunds []Fund
+		for _, fund := range funds {
+			if fund.Name == nameFund {
+				continue
+			} else {
+				newFunds = append(newFunds, fund)
+			}
+		}
+		updatedFunds, err := json.MarshalIndent(newFunds, "", "\t")
+		if err != nil {
+			log.Fatalf("Error marshaling json from updatedFunds: %v", err)
+		}
+
+		err = os.WriteFile(fundsFile, updatedFunds, 0666)
+		if err != nil {
+			log.Fatalf("Error writing file %s : %v", fundsFile, err)
+		}
+	case myFundsFile:
+		var myFunds []Portfolio
+		data, err := os.ReadFile(myFundsFile)
+		if err != nil {
+			log.Fatalf("Error reading file %s : %v", myFundsFile, err)
+		}
+		err = json.Unmarshal(data, &myFunds)
+		if err != nil {
+			log.Fatalf("Error unmarshaling funds: %v", err)
+		}
+
+		var newMyFunds []Portfolio
+		for _, myFund := range myFunds {
+			if myFund.Name == nameFund {
+				continue
+			} else {
+				newMyFunds = append(newMyFunds, myFund)
+			}
+		}
+		updatedFunds, err := json.MarshalIndent(newMyFunds, "", "\t")
+		if err != nil {
+			log.Fatalf("Error marshaling json from updatedFunds: %v", err)
+		}
+
+		err = os.WriteFile(myFundsFile, updatedFunds, 0666)
+		if err != nil {
+			log.Fatalf("Error writing file %s : %v", myFundsFile, err)
+		}
 	default:
 		log.Fatalf("Wrong context: %s", context)
 	}
