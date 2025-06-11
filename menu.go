@@ -258,7 +258,7 @@ func subMenuExport(context string, choosenFunds string) {
 				if dir.IsDir() {
 					log.Printf("path: %s isDir", path)
 					// TODO: actually make exportData
-					exportData(context, path, choosenFunds)
+					// exportData(context, path, choosenFunds)
 				} else {
 					log.Printf("Error '%s' is not a valid path", path)
 				}

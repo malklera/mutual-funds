@@ -29,9 +29,37 @@ const (
 	value = `[data-testid="currentShareValueType"]`
 )
 
-func updateValues(add bool) {
+func updateValues() {
 	// WARN: i do not update the value if it has run before and after the close of
 	// market, i just simply add another entry
+	stat, err := os.Stat(fundsFile)
+	if err != nil {
+		log.Fatalf("Error reading the stats of: %s : %v", fundsFile, err)
+	}
+	fileModTime := stat.ModTime()
+	now := time.Now()
+	fileModDay := time.Date(fileModTime.Year(), fileModTime.Month(),
+		fileModTime.Day(), 0, 0, 0, 0, fileModTime.Location())
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+
+	// NOTE: for the future i will like to work with RFC3339 format, i just do
+	// not like the way i would do it now
+
+	var add bool
+
+	if fileModDay.Before(today) {
+		add = true
+	} else {
+		closeMarket := time.Date(now.Year(), now.Month(), now.Day(), hourCloseMarket,
+			0, 0, 0, now.Location())
+
+		if fileModTime.Before(closeMarket) {
+			add = false
+		} else {
+			return
+		}
+	}
+
 	data, err := os.ReadFile(fundsFile)
 	if err != nil {
 		log.Fatalf("Error reading file %s : %v", fundsFile, err)
@@ -45,15 +73,8 @@ func updateValues(add bool) {
 
 	var newFunds []Fund
 
-	// add a conditional here
-	if add {
-		for _, fund := range funds {
-			newFunds = append(newFunds, getInfo(fund, add))
-		}
-	} else {
-		for n, fund := range funds {
-			newFunds = append(newFunds, getInfo(fund, add))
-		}
+	for _, fund := range funds {
+		newFunds = append(newFunds, getInfo(fund, add))
 	}
 
 	updatedFunds, err := json.MarshalIndent(newFunds, "", "\t")
