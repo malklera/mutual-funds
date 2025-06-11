@@ -253,9 +253,7 @@ func menuModify(context string) {
 			case "1":
 				subMenuModify(context)
 			case "2":
-				// TODO: do the subMenuAdd(context) function and the actual
-				// adding function on operations
-				fmt.Println("adding fund")
+				subMenuAdd(context)
 			case "3":
 				// TODO: do the subMenuDelete(context) function and the actual
 				// deleting function on operations
@@ -302,6 +300,44 @@ func subMenuModify(context string) {
 					modifyData(context, opt)
 				} else {
 					fmt.Printf("Fund do not exist: %s", opt)
+				}
+			}
+		} else {
+			fmt.Printf("Error reading input: %v", err)
+		}
+	}
+}
+
+func subMenuAdd(context string) {
+	fmt.Print("\nOperating over ")
+	switch context {
+	case myFundsFile:
+		fmt.Println("my funds")
+	case fundsFile:
+		fmt.Println("all funds")
+	default:
+		fmt.Println(context)
+	}
+	for {
+		fmt.Println("\nWhat do you wish to do?")
+		fmt.Println("1- Back")
+		fmt.Println("2- Show funds")
+		fmt.Println("- Input fund name to add")
+		fmt.Print("> ")
+
+		opt, err := reader.ReadString('\n')
+		if err == nil {
+			opt = strings.TrimSuffix(opt, "\n")
+			switch opt {
+			case "1":
+				return
+			case "2":
+				showData(context, "allFunds")
+			default:
+				if fundExist(context, opt) {
+					fmt.Printf("The fund '%s' already exist", opt)
+				} else {
+					addData(context, opt)
 				}
 			}
 		} else {

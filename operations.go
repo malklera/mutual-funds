@@ -295,3 +295,91 @@ func modifyData(context string, fundName string) {
 		log.Fatalf("Error, wrong context: %s", context)
 	}
 }
+
+func addData(context string, nameFund string) {
+	switch context {
+	case fundsFile:
+		fund := Fund{Name: nameFund}
+		for {
+			fmt.Println("DANGER: This data is not check")
+			fmt.Println("Url:")
+			fmt.Print("> ")
+
+			url, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Printf("Error reading input: %s", err)
+			} else {
+				url = strings.TrimSuffix(url, "\n")
+				fund.Url = url
+				break
+			}
+		}
+		var funds []Fund
+		data, err := os.ReadFile(fundsFile)
+		if err != nil {
+			log.Fatalf("Error reading file %s : %v", fundsFile, err)
+		}
+		err = json.Unmarshal(data, &funds)
+		if err != nil {
+			log.Fatalf("Error unmarshaling funds: %v", err)
+		}
+
+		funds = append(funds, fund)
+		updatedFunds, err := json.MarshalIndent(funds, "", "\t")
+		if err != nil {
+			log.Fatalf("Error marshaling json from updatedFunds: %v", err)
+		}
+
+		err = os.WriteFile(fundsFile, updatedFunds, 0666)
+		if err != nil {
+			log.Fatalf("Error writing file %s : %v", fundsFile, err)
+		}
+	case myFundsFile:
+		// NOTE: i should check that the nameFund exist on fundsFile
+		myFund := Portfolio{Name: nameFund}
+		for {
+			fmt.Println("DANGER: This data is not check")
+			fmt.Println("Shares:")
+			fmt.Print("> ")
+
+			shares, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Printf("Error reading input: %s", err)
+			} else {
+				shares = strings.TrimSuffix(shares, "\n")
+				parsedShares, err := strconv.ParseFloat(shares, 64)
+				if err != nil {
+					fmt.Printf("Error parsing input: %s : %v", shares, err)
+				} else {
+					myFund.Shares = parsedShares
+					break
+				}
+			}
+		}
+
+		var myFunds []Portfolio
+		myData, err := os.ReadFile(myFundsFile)
+		if err != nil {
+			log.Fatalf("Error reading file %s : %v", myFundsFile, err)
+		}
+		err = json.Unmarshal(myData, &myFunds)
+		if err != nil {
+			log.Fatalf("Error unmarshaling myFunds: %v", err)
+		}
+
+		myFunds = append(myFunds, myFund)
+
+		updatedFunds, err := json.MarshalIndent(myFunds, "", "\t")
+		if err != nil {
+			log.Fatalf("Error marshaling json from updatedFunds: %v", err)
+		}
+
+		err = os.WriteFile(myFundsFile, updatedFunds, 0666)
+		if err != nil {
+			log.Fatalf("Error writing file %s : %v", myFundsFile, err)
+		}
+
+	default:
+		log.Fatalf("Wrong context: %s", context)
+	}
+}
