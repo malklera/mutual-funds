@@ -201,11 +201,15 @@ func menuExport(context string, choosenFunds string) {
 
 	for {
 		fmt.Print("\nOperating over ")
-		if context == myFundsFile {
+		switch context {
+		case myFundsFile:
 			fmt.Println("my funds")
-		} else {
+		case fundsFile:
 			fmt.Println("all funds")
+		default:
+			fmt.Println(context)
 		}
+
 		// NOTE: Leave the menu for future options about how to export it
 		fmt.Println("1- Export data")
 		fmt.Println("2- Back")
@@ -216,6 +220,8 @@ func menuExport(context string, choosenFunds string) {
 		if err == nil {
 			switch opt {
 			case "1":
+				// TODO: ask where and check if it is a valid path
+				subMenuExport(context, choosenFunds)
 				fmt.Println("exporting data")
 			case "2":
 				return
@@ -225,6 +231,42 @@ func menuExport(context string, choosenFunds string) {
 		} else {
 			fmt.Printf("Error reading input: %v", err)
 		}
+	}
+}
+
+func subMenuExport(context string, choosenFunds string) {
+	for {
+		fmt.Print("\nOperating over ")
+		switch context {
+		case myFundsFile:
+			fmt.Println("my funds")
+		case fundsFile:
+			fmt.Println("all funds")
+		default:
+			fmt.Println(context)
+		}
+
+		fmt.Println("Input the path where to export")
+		fmt.Print("> ")
+		path, err := reader.ReadString('\n')
+		path = strings.TrimSuffix(path, "\n")
+		if err == nil {
+			dir, err := os.Stat(path)
+			if err != nil {
+				log.Printf("Error getting the stats of %s : %v", path, err)
+			} else {
+				if dir.IsDir() {
+					log.Printf("path: %s isDir", path)
+					// TODO: actually make exportData
+					exportData(context, path, choosenFunds)
+				} else {
+					log.Printf("Error '%s' is not a valid path", path)
+				}
+			}
+		} else {
+			fmt.Printf("Error reading input: %v", err)
+		}
+
 	}
 }
 

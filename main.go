@@ -33,13 +33,13 @@ func main() {
 			// not like the way i would do it now
 
 			if fileModDay.Before(today) {
-				updateValues()
+				updateValues(true)
 			} else {
 				closeMarket := time.Date(now.Year(), now.Month(), now.Day(), hourCloseMarket,
 					0, 0, 0, now.Location())
 
 				if fileModTime.Before(closeMarket) {
-					updateValues()
+					updateValues(false)
 				} else {
 					return
 				}

@@ -29,7 +29,9 @@ const (
 	value = `[data-testid="currentShareValueType"]`
 )
 
-func updateValues() {
+func updateValues(add bool) {
+	// WARN: i do not update the value if it has run before and after the close of
+	// market, i just simply add another entry
 	data, err := os.ReadFile(fundsFile)
 	if err != nil {
 		log.Fatalf("Error reading file %s : %v", fundsFile, err)
@@ -43,8 +45,15 @@ func updateValues() {
 
 	var newFunds []Fund
 
-	for _, fund := range funds {
-		newFunds = append(newFunds, getInfo(fund))
+	// add a conditional here
+	if add {
+		for _, fund := range funds {
+			newFunds = append(newFunds, getInfo(fund, add))
+		}
+	} else {
+		for n, fund := range funds {
+			newFunds = append(newFunds, getInfo(fund, add))
+		}
 	}
 
 	updatedFunds, err := json.MarshalIndent(newFunds, "", "\t")
@@ -58,7 +67,7 @@ func updateValues() {
 	}
 }
 
-func getInfo(fund Fund) Fund {
+func getInfo(fund Fund, add bool) Fund {
 	ctx, cancel := chromedp.NewContext(context.Background())
 	defer cancel()
 
@@ -80,8 +89,7 @@ func getInfo(fund Fund) Fund {
 
 	if resName != fund.Name {
 		log.Printf("Error with url:\n%s\n", fund.Url)
-		log.Printf("Name of fund has changed: %v", err)
-		// TODO: Take me modify mutual fund, so i can update the name
+		log.Printf("Name of fund has changed form '%s' to '%s'", fund.Name, resName)
 	}
 
 	if resRisk != fund.Risk {
@@ -97,7 +105,12 @@ func getInfo(fund Fund) Fund {
 		log.Fatalf("Error trying to convert %s to int: %v", strings.TrimPrefix(resValue, "$ "), err)
 	}
 
-	fund.Value = append(fund.Value, ValueEntry{Date: date, Price: resValueFloat})
+	// This determines if i add a new entry or update the last one
+	if add {
+		fund.Value = append(fund.Value, ValueEntry{Date: date, Price: resValueFloat})
+	} else {
+		fund.Value[len(fund.Value)-1] = ValueEntry{Date: date, Price: resValueFloat}
+	}
 
 	return fund
 }
