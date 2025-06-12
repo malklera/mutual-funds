@@ -2,10 +2,12 @@ package main
 
 import (
 	"bufio"
+	"io"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -467,5 +469,92 @@ func deleteData(context string, nameFund string) {
 		}
 	default:
 		log.Fatalf("Wrong context: %s", context)
+	}
+}
+
+func exportData(context string, path string, choosenFunds string) {
+	if choosenFunds == "allFunds" {
+		currentDir, err := os.Getwd()
+		if err != nil {
+			log.Fatalf("Error getting current directory: %v", err)
+		}
+
+		srcFile, err := os.Open(filepath.Join(currentDir, context))
+		if err != nil {
+			log.Fatalf("Error opening file %s : %v", context, err)
+		}
+		defer srcFile.Close()
+
+		destFile, err := os.Create(filepath.Join(path, context))
+		if err != nil {
+			log.Fatalf("Error creating file %s : %v", context, err)
+		}
+		defer destFile.Close()
+
+		_, err = io.Copy(destFile, srcFile)
+		if err != nil {
+			log.Fatalf("Error copying file: %v", err)
+		}
+	} else {
+		switch context {
+		case fundsFile:
+			var funds []Fund
+			data, err := os.ReadFile(context)
+			if err != nil {
+				log.Fatalf("Error reading file %s : %v", context, err)
+			}
+			err = json.Unmarshal(data, &funds)
+			if err != nil {
+				log.Fatalf("Error unmarshaling data: %v", err)
+			}
+
+			var exportFund Fund
+			for _, fund := range funds {
+				if fund.Name == choosenFunds {
+					exportFund = fund
+				}
+			}
+
+			marshaledFund, err := json.MarshalIndent(exportFund, "", "\t")
+			if err != nil {
+				log.Fatalf("Error marshaling json from exportFund: %v", err)
+			}
+
+			err = os.WriteFile(filepath.Join(path, context), marshaledFund, 0666)
+			if err != nil {
+				log.Fatalf("Error writing file %s : %v", context, err)
+			}
+		case myFundsFile:
+			// NOTE: think about this, i want to export only what is in myFunds.json
+			// or export that and the related info from funds.json?
+			var myFunds []Portfolio
+			data, err := os.ReadFile(context)
+			if err != nil {
+				log.Fatalf("Error reading file %s : %v", context, err)
+			}
+			err = json.Unmarshal(data, &myFunds)
+			if err != nil {
+				log.Fatalf("Error unmarshaling data: %v", err)
+			}
+
+			var exportFund Portfolio
+			for _, myFund := range myFunds {
+				if myFund.Name == choosenFunds {
+					exportFund = myFund
+				}
+			}
+
+			marshaledFund, err := json.MarshalIndent(exportFund, "", "\t")
+			if err != nil {
+				log.Fatalf("Error marshaling json from exportFund: %v", err)
+			}
+
+			err = os.WriteFile(filepath.Join(path, context), marshaledFund, 0666)
+			if err != nil {
+				log.Fatalf("Error writing file %s : %v", context, err)
+			}
+		default:
+			log.Fatalf("Wrong context: %s", context)
+		}
 	}
 }

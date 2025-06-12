@@ -220,9 +220,7 @@ func menuExport(context string, choosenFunds string) {
 		if err == nil {
 			switch opt {
 			case "1":
-				// TODO: ask where and check if it is a valid path
 				subMenuExport(context, choosenFunds)
-				fmt.Println("exporting data")
 			case "2":
 				return
 			default:
@@ -256,9 +254,7 @@ func subMenuExport(context string, choosenFunds string) {
 				log.Printf("Error getting the stats of %s : %v", path, err)
 			} else {
 				if dir.IsDir() {
-					log.Printf("path: %s isDir", path)
-					// TODO: actually make exportData
-					// exportData(context, path, choosenFunds)
+					exportData(context, path, choosenFunds)
 				} else {
 					log.Printf("Error '%s' is not a valid path", path)
 				}
@@ -266,7 +262,6 @@ func subMenuExport(context string, choosenFunds string) {
 		} else {
 			fmt.Printf("Error reading input: %v", err)
 		}
-
 	}
 }
 
