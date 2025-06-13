@@ -19,9 +19,9 @@ func main() {
 		if os.Args[1] == "-u" {
 			updateValues()
 		} else {
-			log.Fatalf("Wrong argument: %s", os.Args[1])
+			log.Printf("Wrong argument: %s\n", os.Args[1])
 		}
 	default:
-		log.Fatalf("Too many arguments.")
+		log.Printf("Too many arguments.\n")
 	}
 }

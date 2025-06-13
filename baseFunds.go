@@ -1,17 +1,19 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 )
 
-func createBaseFile(path string, baseContentJson []byte) {
-	_, err := os.Stat(path)
+func createBaseFile(filePath string, baseContentJson []byte) {
+	_, err := os.Stat(filePath)
 	if os.IsNotExist(err) {
-		err := os.WriteFile(path, baseContentJson, 0644)
+		err := os.WriteFile(filePath, baseContentJson, 0644)
 		if err != nil {
-			log.Fatalf("Failed to create base %s: %v", path, err)
+			fmt.Printf("Failed to create base %s: %v\n", filePath, err)
 		}
+	} else {
+		fmt.Printf("File:\n%s\n Already exist\n")
 	}
 }
 

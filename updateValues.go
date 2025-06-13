@@ -30,11 +30,10 @@ const (
 )
 
 func updateValues() {
-	// WARN: i do not update the value if it has run before and after the close of
-	// market, i just simply add another entry
 	stat, err := os.Stat(fundsFile)
 	if err != nil {
-		log.Fatalf("Error reading the stats of: %s : %v", fundsFile, err)
+		log.Printf("Error reading the stats of: %s : %v\n", fundsFile, err)
+		return
 	}
 	fileModTime := stat.ModTime()
 	now := time.Now()
@@ -62,33 +61,40 @@ func updateValues() {
 
 	data, err := os.ReadFile(fundsFile)
 	if err != nil {
-		log.Fatalf("Error reading file %s : %v", fundsFile, err)
+		log.Printf("Error reading file %s : %v\n", fundsFile, err)
+		return
 	}
 
 	var funds []Fund
 	err = json.Unmarshal(data, &funds)
 	if err != nil {
-		log.Fatalf("Error unmarshaling file %s : %v", fundsFile, err)
+		log.Printf("Error unmarshaling file %s : %v\n", fundsFile, err)
+		return
 	}
 
 	var newFunds []Fund
 
 	for _, fund := range funds {
-		newFunds = append(newFunds, getInfo(fund, add))
+		err := getInfo(&fund, add)
+		if err != nil {
+			log.Printf("Error getting info: %v\n", err)
+			}
 	}
 
 	updatedFunds, err := json.MarshalIndent(newFunds, "", "\t")
 	if err != nil {
-		log.Fatalf("Error marshaling json from funds: %v", err)
+		log.Printf("Error marshaling json from funds: %v\n", err)
+		return
 	}
 
 	err = os.WriteFile(fundsFile, updatedFunds, 0666)
 	if err != nil {
-		log.Fatalf("Error writing file %s : %v", fundsFile, err)
+		log.Printf("Error writing file %s : %v\n", fundsFile, err)
+		return
 	}
 }
 
-func getInfo(fund Fund, add bool) Fund {
+func getInfo(fund *Fund, add bool) error {
 	ctx, cancel := chromedp.NewContext(context.Background())
 	defer cancel()
 
@@ -105,16 +111,16 @@ func getInfo(fund Fund, add bool) Fund {
 
 	if err != nil {
 		log.Printf("Error with url:\n%s\n", fund.Url)
-		log.Fatalln(err)
+		return err
 	}
 
 	if resName != fund.Name {
 		log.Printf("Error with url:\n%s\n", fund.Url)
-		log.Printf("Name of fund has changed form '%s' to '%s'", fund.Name, resName)
+		log.Printf("Name of fund has changed form '%s' to '%s'\n", fund.Name, resName)
 	}
 
 	if resRisk != fund.Risk {
-		log.Printf("Risk of fund change from '%s' to '%s'", fund.Risk, resRisk)
+		log.Printf("Risk of fund change from '%s' to '%s'\n", fund.Risk, resRisk)
 		fund.Risk = resRisk
 	}
 
@@ -123,7 +129,8 @@ func getInfo(fund Fund, add bool) Fund {
 	resValue = strings.ReplaceAll(resValue, ",", ".")
 	resValueFloat, err := strconv.ParseFloat(resValue, 64)
 	if err != nil {
-		log.Fatalf("Error trying to convert %s to int: %v", strings.TrimPrefix(resValue, "$ "), err)
+		log.Printf("Error trying to convert %s to float\n", strings.TrimPrefix(resValue, "$ "))
+		return err
 	}
 
 	// This determines if i add a new entry or update the last one
@@ -133,5 +140,5 @@ func getInfo(fund Fund, add bool) Fund {
 		fund.Value[len(fund.Value)-1] = ValueEntry{Date: date, Price: resValueFloat}
 	}
 
-	return fund
+	return nil
 }

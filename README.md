@@ -161,8 +161,13 @@ TODO: Check if the cuantity of share i own increase with time or what
 TODO: Look for the proper way of dealing with user input, the current way works,
 but i do not like it, look into bufio.Scanner
 
+TODO: change the passing of values between function calls to pointers, will
+save memory, change the functions to stop returning a copy
+
 TODO: Manage all the errors, i want to go back a menu or retry on all of then,
 leave this for last
+
+TODO: Make it pretty with some cli framework, melkey show one
 
 After all that work, read if it is possible to save login data to compare my tracking
 with the one generate by the website, only if I can encrypt my login data, and use it

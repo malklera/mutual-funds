@@ -23,7 +23,9 @@ func menu() {
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
-		if err == nil {
+		if err != nil {
+			fmt.Printf("Error reading input: %v\n", err)
+		} else {
 			switch opt {
 			case "1":
 				optionsMenu(myFundsFile)
@@ -32,7 +34,7 @@ func menu() {
 			case "3":
 				path, err := os.Getwd()
 				if err != nil {
-					log.Printf("Error getting path: %v", err)
+					fmt.Printf("Error getting path: %v\n", err)
 				}
 				createBaseFile(filepath.Join(path, fundsFile), baseFundsJson)
 				createBaseFile(filepath.Join(path, myFundsFile), baseMyFundsJson)
@@ -46,7 +48,9 @@ func menu() {
 
 					opt, err := reader.ReadString('\n')
 					opt = strings.TrimSuffix(opt, "\n")
-					if err == nil {
+					if err != nil {
+						fmt.Printf("Error reading input: %v\n", err)
+					} else {
 						switch opt {
 						case "y", "Y":
 							os.Exit(0)
@@ -55,15 +59,11 @@ func menu() {
 						default:
 							fmt.Println("Wrong option")
 						}
-					} else {
-						fmt.Printf("Error reading input: %v", err)
 					}
 				}
 			default:
 				fmt.Println("Wrong option")
 			}
-		} else {
-			fmt.Printf("Error reading input: %v", err)
 		}
 	}
 }
@@ -85,7 +85,9 @@ func optionsMenu(context string) {
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
-		if err == nil {
+		if err != nil {
+			fmt.Printf("Error reading input: %v\n", err)
+		} else {
 			switch opt {
 			case "1":
 				innerFor := true
@@ -98,21 +100,26 @@ func optionsMenu(context string) {
 
 					opt2, err2 := reader.ReadString('\n')
 					opt2 = strings.TrimSuffix(opt2, "\n")
-					if err2 == nil {
+					if err2 != nil {
+						fmt.Printf("Error reading input: %v\n", err2)
+					} else {
 						switch opt2 {
 						case "1":
 							menuShow(context, "allFunds")
 						case "2":
 							innerFor = false
 						default:
-							if fundExist(context, opt2) {
-								menuShow(context, opt2)
+							exists, err := fundExist(context, opt2)
+							if err != nil {
+								fmt.Printf("Error checking the existence of %s : %v\n", opt2, err)
 							} else {
-								fmt.Println("Invalid fund name.")
+								if exists {
+									menuShow(context, opt2)
+								} else {
+									fmt.Println("Invalid fund name.")
+								}
 							}
 						}
-					} else {
-						fmt.Printf("Error reading input: %v", err2)
 					}
 				}
 			case "2":
@@ -126,21 +133,26 @@ func optionsMenu(context string) {
 
 					opt2, err2 := reader.ReadString('\n')
 					opt2 = strings.TrimSuffix(opt2, "\n")
-					if err2 == nil {
+					if err2 != nil {
+						fmt.Printf("Error reading input: %v\n", err2)
+					} else {
 						switch opt2 {
 						case "1":
 							menuExport(context, "allFunds")
 						case "2":
 							innerFor = false
 						default:
-							if fundExist(context, opt2) {
-								menuExport(context, opt2)
+							exists, err := fundExist(context, opt2)
+							if err != nil {
+								fmt.Printf("Error checking the existence of %s : %v\n", opt2, err)
 							} else {
-								fmt.Println("Invalid fund name.")
+								if exists {
+									menuExport(context, opt2)
+								} else {
+									fmt.Println("Invalid fund name.")
+								}
 							}
 						}
-					} else {
-						fmt.Printf("Error reading input: %v", err2)
 					}
 				}
 			case "3":
@@ -148,10 +160,8 @@ func optionsMenu(context string) {
 			case "4":
 				return
 			default:
-				fmt.Println("Wrong option")
+				fmt.Println("Wrong option.")
 			}
-		} else {
-			fmt.Printf("Error reading input: %v", err)
 		}
 	}
 }
@@ -175,7 +185,9 @@ func menuShow(context string, choosenFunds string) {
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
-		if err == nil {
+		if err != nil {
+			fmt.Printf("Error reading input: %v\n", err)
+		} else {
 			switch opt {
 			case "1":
 				switch choosenFunds {
@@ -187,18 +199,14 @@ func menuShow(context string, choosenFunds string) {
 			case "2":
 				return
 			default:
-				fmt.Println("Wrong option")
+				fmt.Println("Wrong option.")
 			}
-		} else {
-			fmt.Printf("Error reading input: %v", err)
 		}
 	}
 }
 
 func menuExport(context string, choosenFunds string) {
-	// TODO: Give options of exporting to a place on the pc choosen by the user
-	// first option will be a .json file, later on maybe other options
-
+	// TODO: In the future i may allow other format apart from .json for export
 	for {
 		fmt.Print("\nOperating over ")
 		switch context {
@@ -210,24 +218,23 @@ func menuExport(context string, choosenFunds string) {
 			fmt.Println(context)
 		}
 
-		// NOTE: Leave the menu for future options about how to export it
 		fmt.Println("1- Export data")
 		fmt.Println("2- Back")
 		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
-		if err == nil {
+		if err != nil {
+			fmt.Printf("Error reading input: %v\n", err)
+		} else {
 			switch opt {
 			case "1":
 				subMenuExport(context, choosenFunds)
 			case "2":
 				return
 			default:
-				fmt.Println("Wrong option")
+				fmt.Println("Wrong option.")
 			}
-		} else {
-			fmt.Printf("Error reading input: %v", err)
 		}
 	}
 }
@@ -244,23 +251,28 @@ func subMenuExport(context string, choosenFunds string) {
 			fmt.Println(context)
 		}
 
+		fmt.Println("1- Back")
 		fmt.Println("Input the path where to export")
 		fmt.Print("> ")
 		path, err := reader.ReadString('\n')
-		path = strings.TrimSuffix(path, "\n")
-		if err == nil {
-			dir, err := os.Stat(path)
-			if err != nil {
-				log.Printf("Error getting the stats of %s : %v", path, err)
+		if err != nil {
+			fmt.Printf("Error reading input: %v\n", err)
+		} else {
+			path = strings.TrimSuffix(path, "\n")
+			if path == "1" {
+				return
 			} else {
-				if dir.IsDir() {
-					exportData(context, path, choosenFunds)
+				dir, err := os.Stat(path)
+				if err != nil {
+					log.Printf("Error getting the stats of %s : %v\n", path, err)
 				} else {
-					log.Printf("Error '%s' is not a valid path", path)
+					if dir.IsDir() {
+						exportData(context, path, choosenFunds)
+					} else {
+						log.Printf("Error, '%s' is not a valid path\n", path)
+					}
 				}
 			}
-		} else {
-			fmt.Printf("Error reading input: %v", err)
 		}
 	}
 }
@@ -285,7 +297,9 @@ func menuModify(context string) {
 
 		opt, err := reader.ReadString('\n')
 		opt = strings.TrimSuffix(opt, "\n")
-		if err == nil {
+		if err != nil {
+			fmt.Printf("Error reading input: %v\n", err)
+		} else {
 			switch opt {
 			case "1":
 				subMenuModify(context)
@@ -296,10 +310,8 @@ func menuModify(context string) {
 			case "4":
 				return
 			default:
-				fmt.Println("Wrong option")
+				fmt.Println("Wrong option.")
 			}
-		} else {
-			fmt.Printf("Error reading input: %v", err)
 		}
 	}
 }
@@ -323,22 +335,30 @@ func subMenuModify(context string) {
 		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
-		opt = strings.TrimSuffix(opt, "\n")
-		if err == nil {
+		if err != nil {
+			fmt.Printf("Error reading input: %v\n", err)
+		} else {
+			opt = strings.TrimSuffix(opt, "\n")
 			switch opt {
 			case "1":
 				return
 			case "2":
-				showData(context, "allFunds")
+				err := showData(context, "allFunds")
+				if err != nil {
+					fmt.Printf("Error on showData: %v\n", err)
+				}
 			default:
-				if fundExist(context, opt) {
-					modifyData(context, opt)
+				exists, err := fundExist(context, opt)
+				if err != nil {
+					fmt.Printf("Error checking existence of %s : %v", opt, err)
 				} else {
-					fmt.Printf("Fund do not exist: %s", opt)
+					if exists {
+						modifyData(context, opt)
+					} else {
+						fmt.Printf("Fund do not exist: %s\n", opt)
+					}
 				}
 			}
-		} else {
-			fmt.Printf("Error reading input: %v", err)
 		}
 	}
 }
@@ -362,7 +382,9 @@ func subMenuAdd(context string) {
 		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
-		if err == nil {
+		if err != nil {
+			fmt.Printf("Error reading input: %v\n", err)
+		} else {
 			opt = strings.TrimSuffix(opt, "\n")
 			switch opt {
 			case "1":
@@ -370,14 +392,17 @@ func subMenuAdd(context string) {
 			case "2":
 				showData(context, "allFunds")
 			default:
-				if fundExist(context, opt) {
-					fmt.Printf("The fund '%s' already exist", opt)
+				exists, err := fundExist(context, opt)
+				if err != nil {
+					fmt.Printf("Error checking existence of %s : %v\n", opt, err)
 				} else {
-					addData(context, opt)
+					if exists {
+						fmt.Printf("The fund '%s' already exist\n", opt)
+					} else {
+						addData(context, opt)
+					}
 				}
 			}
-		} else {
-			fmt.Printf("Error reading input: %v", err)
 		}
 	}
 }
@@ -401,7 +426,9 @@ func subMenuDelete(context string) {
 		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
-		if err == nil {
+		if err != nil {
+			fmt.Printf("Error reading input: %v\n", err)
+		} else {
 			opt = strings.TrimSuffix(opt, "\n")
 			switch opt {
 			case "1":
@@ -409,14 +436,17 @@ func subMenuDelete(context string) {
 			case "2":
 				showData(context, "allFunds")
 			default:
-				if fundExist(context, opt) {
-					deleteData(context, opt)
+				exists, err := fundExist(context, opt)
+				if err != nil {
+					fmt.Printf("Error checking existence of %s : %v\n", opt, err)
 				} else {
-					fmt.Printf("The fund '%s' do not exist", opt)
+					if exists {
+						deleteData(context, opt)
+					} else {
+						fmt.Printf("The fund '%s' do not exist\n", opt)
+					}
 				}
 			}
-		} else {
-			fmt.Printf("Error reading input: %v", err)
 		}
 	}
 }
