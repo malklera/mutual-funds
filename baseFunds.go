@@ -13,7 +13,7 @@ func createBaseFile(filePath string, baseContentJson []byte) {
 			fmt.Printf("Failed to create base %s: %v\n", filePath, err)
 		}
 	} else {
-		fmt.Printf("File:\n%s\n Already exist\n")
+		fmt.Printf("File:\n%s\n Already exist\n", filePath)
 	}
 }
 

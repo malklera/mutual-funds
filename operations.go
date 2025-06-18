@@ -546,14 +546,24 @@ func exportData(context string, path string, choosenFunds string) error {
 			log.Printf("Error opening file %s\n", context)
 			return err
 		}
-		defer srcFile.Close()
+		defer func() {
+			err := srcFile.Close()
+			if err != nil {
+				log.Printf("Error closing the file %s : %v", context, err)
+			}
+		} ()
 
 		destFile, err := os.Create(filepath.Join(path, context))
 		if err != nil {
 			log.Printf("Error creating file %s\n", context)
 			return err
 		}
-		defer destFile.Close()
+		defer func() {
+			err := destFile.Close()
+			if err != nil {
+				log.Printf("Error closing the file %s : %v", context, err)
+			}
+		} ()
 
 		_, err = io.Copy(destFile, srcFile)
 		if err != nil {
