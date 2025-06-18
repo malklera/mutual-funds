@@ -17,7 +17,10 @@ func main() {
 		menu()
 	case 2:
 		if os.Args[1] == "-u" {
-			updateValues()
+			err := updateValues()
+			if err != nil {
+				log.Printf("Error with updateValues() : %v\n", err)
+			}
 		} else {
 			log.Printf("Wrong argument: %s\n", os.Args[1])
 		}

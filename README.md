@@ -156,23 +156,22 @@ the best, keep separate from the ones the user actually own.
 DONE
 
 
-TODO: Check if the cuantity of share i own increase with time or what
-DONE: No, only the value of the share changes.
+TODO/DONE: Check if the cuantity of share i own increase with time or what.
+No, only the value of the share changes.
+
+TODO/DONE: change the passing of values between function calls to pointers, will
+save memory, change the functions to stop returning a copy
+
+TODO/DONE: Manage all the errors, i want to go back a menu or retry on all of then,
+leave this for last
+
+TODO/DONE: Change the way i show my funds.
+
 
 TODO: Look for the proper way of dealing with user input, the current way works,
 but i do not like it, look into bufio.Scanner
 
-TODO: change the passing of values between function calls to pointers, will
-save memory, change the functions to stop returning a copy
-
-TODO: Manage all the errors, i want to go back a menu or retry on all of then,
-leave this for last
-DONE
-
 TODO: Sanitaze user input when dealing with numbers of shares
-
-TODO: Change the way i show my funds.
-DONE
 
 TODO: When adding a new fund ask for url only, and get the info, show to the user
 and ask if accept to add it

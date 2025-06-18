@@ -51,7 +51,7 @@ func showData(context string, choosenFunds string) error {
 				for _, myFund := range myFunds {
 					if fund.Name == myFund.Name {
 						fmt.Println("Name:", fund.Name)
-						fmt.Println("Url:", fund.Url)
+						fmt.Println("Url:", fund.URL)
 						fmt.Println("Risk:", fund.Risk)
 						fmt.Println("Owned shares:", myFund.Shares)
 						lastValue := fund.Value[len(fund.Value)-1].Price * myFund.Shares
@@ -73,7 +73,7 @@ func showData(context string, choosenFunds string) error {
 						for _, myFund := range myFunds {
 							if choosenFunds == myFund.Name {
 								fmt.Println("Name:", fund.Name)
-								fmt.Println("Url:", fund.Url)
+								fmt.Println("Url:", fund.URL)
 								fmt.Println("Risk:", fund.Risk)
 								fmt.Println("Owned shares:", myFund.Shares)
 								lastValue := fund.Value[len(fund.Value)-1].Price * myFund.Shares
@@ -95,7 +95,7 @@ func showData(context string, choosenFunds string) error {
 		if choosenFunds == "allFunds" {
 			for _, fund := range funds {
 				fmt.Println("Name:", fund.Name)
-				fmt.Println("Url:", fund.Url)
+				fmt.Println("Url:", fund.URL)
 				fmt.Println("Risk:", fund.Risk)
 			}
 		} else {
@@ -108,7 +108,7 @@ func showData(context string, choosenFunds string) error {
 					for _, fund := range funds {
 						if choosenFunds == fund.Name {
 							fmt.Println("Name:", fund.Name)
-							fmt.Println("Url:", fund.Url)
+							fmt.Println("Url:", fund.URL)
 							fmt.Println("Risk:", fund.Risk)
 							return nil
 						}
@@ -234,7 +234,7 @@ func modifyData(context string, fundName string) error {
 			if fundName == fund.Name {
 				var newFund Fund
 				fmt.Println("Name:", fund.Name)
-				fmt.Println("Url:", fund.Url)
+				fmt.Println("Url:", fund.URL)
 
 				for innerFor {
 					fmt.Println("What do you which to change?")
@@ -259,7 +259,7 @@ func modifyData(context string, fundName string) error {
 							} else {
 								name = strings.TrimSuffix(name, "\n")
 								newFund.Name = name
-								newFund.Url = fund.Url
+								newFund.URL = fund.URL
 								newFund.Risk = fund.Risk
 								newFund.Value = append(newFund.Value, fund.Value...)
 
@@ -274,7 +274,7 @@ func modifyData(context string, fundName string) error {
 							} else {
 								url = strings.TrimSuffix(url, "\n")
 								newFund.Name = fund.Name
-								newFund.Url = url
+								newFund.URL = url
 								newFund.Risk = fund.Risk
 								newFund.Value = append(newFund.Value, fund.Value...)
 
@@ -323,7 +323,7 @@ func addData(context string, nameFund string) error {
 				fmt.Printf("Error reading input: %s", err)
 			} else {
 				url = strings.TrimSuffix(url, "\n")
-				fund.Url = url
+				fund.URL = url
 				break
 			}
 		}

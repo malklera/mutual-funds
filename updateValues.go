@@ -13,7 +13,7 @@ import (
 
 type Fund struct {
 	Name  string       `json:"name"`
-	Url   string       `json:"url"`
+	URL   string       `json:"url"`
 	Risk  string       `json:"risk"`
 	Value []ValueEntry `json:"value"`
 }
@@ -29,11 +29,11 @@ const (
 	value = `[data-testid="currentShareValueType"]`
 )
 
-func updateValues() {
+func updateValues() error {
 	stat, err := os.Stat(fundsFile)
 	if err != nil {
-		log.Printf("Error reading the stats of: %s : %v\n", fundsFile, err)
-		return
+		log.Printf("Error reading the stats of %s\n", fundsFile)
+		return err
 	}
 	fileModTime := stat.ModTime()
 	now := time.Now()
@@ -55,21 +55,21 @@ func updateValues() {
 		if fileModTime.Before(closeMarket) {
 			add = false
 		} else {
-			return
+			return nil
 		}
 	}
 
 	data, err := os.ReadFile(fundsFile)
 	if err != nil {
-		log.Printf("Error reading file %s : %v\n", fundsFile, err)
-		return
+		log.Printf("Error reading file '%s'\n", fundsFile)
+		return err
 	}
 
 	var funds []Fund
 	err = json.Unmarshal(data, &funds)
 	if err != nil {
-		log.Printf("Error unmarshaling file %s : %v\n", fundsFile, err)
-		return
+		log.Printf("Error unmarshaling file '%s'\n", fundsFile)
+		return err
 	}
 
 	var newFunds []Fund
@@ -77,21 +77,22 @@ func updateValues() {
 	for _, fund := range funds {
 		err := getInfo(&fund, add)
 		if err != nil {
-			log.Printf("Error getting info: %v\n", err)
-			}
+			log.Printf("Error getting info of fund: %s : %v\n", fund.Name, err)
+		}
 	}
 
 	updatedFunds, err := json.MarshalIndent(newFunds, "", "\t")
 	if err != nil {
-		log.Printf("Error marshaling json from funds: %v\n", err)
-		return
+		log.Println("Error marshaling json from updatedFunds")
+		return err
 	}
 
 	err = os.WriteFile(fundsFile, updatedFunds, 0666)
 	if err != nil {
-		log.Printf("Error writing file %s : %v\n", fundsFile, err)
-		return
+		log.Printf("Error writing file '%s'\n", fundsFile)
+		return err
 	}
+	return nil
 }
 
 func getInfo(fund *Fund, add bool) error {
@@ -103,19 +104,19 @@ func getInfo(fund *Fund, add bool) error {
 	var resValue string
 	date := time.Now().Format(time.DateOnly)
 	err := chromedp.Run(ctx,
-		chromedp.Navigate(fund.Url),
+		chromedp.Navigate(fund.URL),
 		chromedp.Text(name, &resName, chromedp.NodeVisible),
 		chromedp.Text(risk, &resRisk, chromedp.NodeVisible),
 		chromedp.Text(value, &resValue, chromedp.NodeVisible),
 	)
 
 	if err != nil {
-		log.Printf("Error with url:\n%s\n", fund.Url)
+		log.Printf("Error with url:\n%s\n", fund.URL)
 		return err
 	}
 
 	if resName != fund.Name {
-		log.Printf("Error with url:\n%s\n", fund.Url)
+		log.Printf("Error with url:\n%s\n", fund.URL)
 		log.Printf("Name of fund has changed form '%s' to '%s'\n", fund.Name, resName)
 	}
 

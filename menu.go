@@ -36,10 +36,13 @@ func menu() {
 				if err != nil {
 					fmt.Printf("Error getting path: %v\n", err)
 				}
-				createBaseFile(filepath.Join(path, fundsFile), baseFundsJson)
-				createBaseFile(filepath.Join(path, myFundsFile), baseMyFundsJson)
+				createBaseFile(filepath.Join(path, fundsFile), &baseFundsJSON)
+				createBaseFile(filepath.Join(path, myFundsFile), &baseMyFundsJSON)
 			case "4":
-				updateValues()
+				err := updateValues()
+				if err != nil {
+					fmt.Printf("Error with updateValues() : %v\n", err)
+				}
 			case "5":
 				innerFor := true
 				for innerFor {

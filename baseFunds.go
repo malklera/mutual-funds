@@ -5,10 +5,10 @@ import (
 	"os"
 )
 
-func createBaseFile(filePath string, baseContentJson []byte) {
+func createBaseFile(filePath string, baseContentJSON *[]byte) {
 	_, err := os.Stat(filePath)
 	if os.IsNotExist(err) {
-		err := os.WriteFile(filePath, baseContentJson, 0644)
+		err := os.WriteFile(filePath, *baseContentJSON, 0644)
 		if err != nil {
 			fmt.Printf("Failed to create base %s: %v\n", filePath, err)
 		}
@@ -17,9 +17,9 @@ func createBaseFile(filePath string, baseContentJson []byte) {
 	}
 }
 
-var baseMyFundsJson = []byte(`[]`)
+var baseMyFundsJSON = []byte(`[]`)
 
-var baseFundsJson = []byte(`[
+var baseFundsJSON = []byte(`[
   {
     "name": "Superfondo Acciones",
     "url": "https://www.santander.com.ar/personas/inversiones/informacion-fondos#/detail/1"
