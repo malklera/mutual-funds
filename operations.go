@@ -53,20 +53,12 @@ func showData(context string, choosenFunds string) error {
 						fmt.Println("Name:", fund.Name)
 						fmt.Println("Url:", fund.Url)
 						fmt.Println("Risk:", fund.Risk)
-						fmt.Println("Value:")
-						for _, value := range fund.Value {
-							fmt.Println("\tDate:", value.Date)
-							fmt.Printf("\tPrice: %.3f\n\n", value.Price)
-						}
 						fmt.Println("Owned shares:", myFund.Shares)
 						lastValue := fund.Value[len(fund.Value)-1].Price * myFund.Shares
-						fmt.Printf("Value shares: %f\n\n", lastValue)
-
-						// WARNING: Is this correct? how is the yield calculated, call
-						// the banc or read online, for now i will comment it
-
-						//yield := fund.Value[0].Price - fund.Value[len(fund.Value)-1].Price
-						//fmt.Println("Yield:", yield)
+						fmt.Printf("Value owned shares: %f\n\n", lastValue)
+						fmt.Printf("\tFrom:    %s\n", fund.Value[0].Date)
+						fmt.Printf("\tTo:      %s\n", fund.Value[len(fund.Value)-1].Date)
+						fmt.Printf("\tYield: $ %f\n", fund.Value[0].Price-fund.Value[len(fund.Value)-1].Price)
 					}
 				}
 			}
@@ -83,22 +75,13 @@ func showData(context string, choosenFunds string) error {
 								fmt.Println("Name:", fund.Name)
 								fmt.Println("Url:", fund.Url)
 								fmt.Println("Risk:", fund.Risk)
-								fmt.Println("Value:")
-								for _, value := range fund.Value {
-									fmt.Println("\tDate:", value.Date)
-									fmt.Printf("\tPrice: %.3f\n\n", value.Price)
-								}
 								fmt.Println("Owned shares:", myFund.Shares)
 								lastValue := fund.Value[len(fund.Value)-1].Price * myFund.Shares
-								fmt.Printf("Value shares: %f\n\n", lastValue)
-
+								fmt.Printf("Value owned shares: %f\n\n", lastValue)
+								fmt.Printf("\tFrom:    %s\n", fund.Value[0].Date)
+								fmt.Printf("\tTo:      %s\n", fund.Value[len(fund.Value)-1].Date)
+								fmt.Printf("\tYield: $ %f\n", fund.Value[0].Price-fund.Value[len(fund.Value)-1].Price)
 								return nil
-
-								// WARNING: Is this correct? how is the yield calculated, call
-								// the banc or read online, for now i will comment it
-
-								//yield := fund.Value[0].Price - fund.Value[len(fund.Value)-1].Price
-								//fmt.Println("Yield:", yield)
 							}
 						}
 					}
@@ -114,11 +97,6 @@ func showData(context string, choosenFunds string) error {
 				fmt.Println("Name:", fund.Name)
 				fmt.Println("Url:", fund.Url)
 				fmt.Println("Risk:", fund.Risk)
-				fmt.Println("Value:")
-				for _, value := range fund.Value {
-					fmt.Println("\tDate:", value.Date)
-					fmt.Printf("\tPrice: %.3f\n\n", value.Price)
-				}
 			}
 		} else {
 			exists, err := fundExist(fundsFile, choosenFunds)
@@ -132,11 +110,6 @@ func showData(context string, choosenFunds string) error {
 							fmt.Println("Name:", fund.Name)
 							fmt.Println("Url:", fund.Url)
 							fmt.Println("Risk:", fund.Risk)
-							fmt.Println("Value:")
-							for _, value := range fund.Value {
-								fmt.Println("\tDate:", value.Date)
-								fmt.Printf("\tPrice: %.3f\n\n", value.Price)
-							}
 							return nil
 						}
 					}
@@ -177,7 +150,7 @@ func fundExist(context string, fundName string) (bool, error) {
 
 func modifyData(context string, fundName string) error {
 	// WARN: if i modified the fundsFile it will interfere with my checks of last
-	// modified time, for know let it...
+	// modified time, for now let it...
 	var reader = bufio.NewReader(os.Stdin)
 	switch context {
 	case myFundsFile:
@@ -387,6 +360,8 @@ func addData(context string, nameFund string) error {
 		myFund := Portfolio{Name: nameFund}
 		for {
 			fmt.Println("DANGER: This data is not check")
+			// NOTE: Allow the user to copy and paste from browser
+			// formats: 12345.1234 | 12345,1234 | 12,345.1234 | 12.345,1234
 			fmt.Println("Do not use comas for thousand separator, use dot as a decimal separator")
 			fmt.Println("Shares:")
 			fmt.Print("> ")
@@ -551,7 +526,7 @@ func exportData(context string, path string, choosenFunds string) error {
 			if err != nil {
 				log.Printf("Error closing the file %s : %v", context, err)
 			}
-		} ()
+		}()
 
 		destFile, err := os.Create(filepath.Join(path, context))
 		if err != nil {
@@ -563,7 +538,7 @@ func exportData(context string, path string, choosenFunds string) error {
 			if err != nil {
 				log.Printf("Error closing the file %s : %v", context, err)
 			}
-		} ()
+		}()
 
 		_, err = io.Copy(destFile, srcFile)
 		if err != nil {

@@ -157,6 +157,7 @@ DONE
 
 
 TODO: Check if the cuantity of share i own increase with time or what
+DONE: No, only the value of the share changes.
 
 TODO: Look for the proper way of dealing with user input, the current way works,
 but i do not like it, look into bufio.Scanner
@@ -166,9 +167,17 @@ save memory, change the functions to stop returning a copy
 
 TODO: Manage all the errors, i want to go back a menu or retry on all of then,
 leave this for last
+DONE
+
+TODO: Sanitaze user input when dealing with numbers of shares
+
+TODO: Change the way i show my funds.
+DONE
+
+TODO: When adding a new fund ask for url only, and get the info, show to the user
+and ask if accept to add it
 
 TODO: Make it pretty with some cli framework, melkey show one
 
-After all that work, read if it is possible to save login data to compare my tracking
-with the one generate by the website, only if I can encrypt my login data, and use it
-safely.
+TODO: After a couple of months compare my calculation of yield with the one on the
+page
