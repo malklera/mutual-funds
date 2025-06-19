@@ -336,8 +336,20 @@ func addData(context string, nameFund string) error {
 				fmt.Printf("Error reading input: %s", err)
 			} else {
 				url = strings.TrimSpace(url)
-				fund.URL = url
-				break
+				// NOTE: It seems a litle overboard to make a function to use once
+				exist, resName, err := validURL(nameFund, url)
+				if err != nil {
+					fmt.Printf("Error running validURL: %v", err)
+				} else {
+					if exist {
+						fund.URL = url
+						break
+					} else {
+						fmt.Println("Discrepancy of names")
+						fmt.Println("Given name:", nameFund)
+						fmt.Println("Fund name from url:", resName)
+					}
+				}
 			}
 		}
 		var funds []Fund

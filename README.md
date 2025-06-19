@@ -171,9 +171,9 @@ TODO/DONE: Change the way i show my funds.
 TODO/DONE: Look for the proper way of dealing with user input, the current way works,
 but i do not like it, look into bufio.Scanner
 
-TODO: Sanitaze user input when dealing with numbers of shares
+TODO/DONE: Sanitaze user input when dealing with numbers of shares
 
-TODO: When adding a new fund ask for url only, and get the info, show to the user
+TODO/DONE: When adding a new fund ask for url only, and get the info, show to the user
 and ask if accept to add it
 
 TODO: Make it pretty with some cli framework, melkey show one

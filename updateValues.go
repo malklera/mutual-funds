@@ -143,3 +143,24 @@ func getInfo(fund *Fund, add bool) error {
 
 	return nil
 }
+
+func validURL(nameFund string, url string) (bool, string, error) {
+	ctx, cancel := chromedp.NewContext(context.Background())
+	defer cancel()
+
+	var resName string
+
+	err := chromedp.Run(ctx, chromedp.Navigate(url),
+		chromedp.Text(name, &resName, chromedp.NodeVisible))
+
+	if err != nil {
+		log.Printf("Error with url:\n%s\n", url)
+		return false, "", err
+	}
+
+	if nameFund != resName {
+		return false, "", nil
+	} else {
+		return true, resName, nil
+	}
+}
