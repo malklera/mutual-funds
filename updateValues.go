@@ -74,11 +74,13 @@ func updateValues() error {
 
 	var newFunds []Fund
 
-	for _, fund := range funds {
-		err := getInfo(&fund, add)
+	for i := range funds {
+		err := getInfo(&funds[i], add)
 		if err != nil {
-			log.Printf("Error getting info of fund: %s : %v\n", fund.Name, err)
+			log.Printf("Error getting info of fund: %s : %v\n", funds[i].Name, err)
 		}
+
+		newFunds = append(newFunds, funds[i])
 	}
 
 	updatedFunds, err := json.MarshalIndent(newFunds, "", "\t")
@@ -134,11 +136,17 @@ func getInfo(fund *Fund, add bool) error {
 		return err
 	}
 
-	// This determines if i add a new entry or update the last one
-	if add {
+	// Have to check, otherwise panic the first time after creating base file
+	switch len(fund.Value) {
+	case 0:
 		fund.Value = append(fund.Value, ValueEntry{Date: date, Price: resValueFloat})
-	} else {
-		fund.Value[len(fund.Value)-1] = ValueEntry{Date: date, Price: resValueFloat}
+	default:
+		// This determines if i add a new entry or update the last one
+		if add {
+			fund.Value = append(fund.Value, ValueEntry{Date: date, Price: resValueFloat})
+		} else {
+			fund.Value[len(fund.Value)-1] = ValueEntry{Date: date, Price: resValueFloat}
+		}
 	}
 
 	return nil

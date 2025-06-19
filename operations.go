@@ -47,18 +47,18 @@ func showData(context string, choosenFunds string) error {
 		}
 
 		if choosenFunds == "allFunds" {
-			for _, fund := range funds {
-				for _, myFund := range myFunds {
-					if fund.Name == myFund.Name {
-						fmt.Println("Name:", fund.Name)
-						fmt.Println("Url:", fund.URL)
-						fmt.Println("Risk:", fund.Risk)
-						fmt.Println("Owned shares:", myFund.Shares)
-						lastValue := fund.Value[len(fund.Value)-1].Price * myFund.Shares
+			for i := range funds {
+				for n := range myFunds {
+					if funds[i].Name == myFunds[n].Name {
+						fmt.Println("Name:", funds[i].Name)
+						fmt.Println("Url:", funds[i].URL)
+						fmt.Println("Risk:", funds[i].Risk)
+						fmt.Println("Owned shares:", myFunds[n].Shares)
+						lastValue := funds[i].Value[len(funds[i].Value)-1].Price * myFunds[n].Shares
 						fmt.Printf("Value owned shares: %f\n\n", lastValue)
-						fmt.Printf("\tFrom:    %s\n", fund.Value[0].Date)
-						fmt.Printf("\tTo:      %s\n", fund.Value[len(fund.Value)-1].Date)
-						fmt.Printf("\tYield: $ %f\n", fund.Value[0].Price-fund.Value[len(fund.Value)-1].Price)
+						fmt.Printf("\tFrom:    %s\n", funds[i].Value[0].Date)
+						fmt.Printf("\tTo:      %s\n", funds[i].Value[len(funds[i].Value)-1].Date)
+						fmt.Printf("\tYield: $ %f\n", funds[i].Value[0].Price-funds[i].Value[len(funds[i].Value)-1].Price)
 					}
 				}
 			}
@@ -69,18 +69,18 @@ func showData(context string, choosenFunds string) error {
 				return err
 			} else {
 				if exists {
-					for _, fund := range funds {
-						for _, myFund := range myFunds {
-							if choosenFunds == myFund.Name {
-								fmt.Println("Name:", fund.Name)
-								fmt.Println("Url:", fund.URL)
-								fmt.Println("Risk:", fund.Risk)
-								fmt.Println("Owned shares:", myFund.Shares)
-								lastValue := fund.Value[len(fund.Value)-1].Price * myFund.Shares
+					for i := range funds {
+						for n := range myFunds {
+							if choosenFunds == myFunds[n].Name {
+								fmt.Println("Name:", funds[i].Name)
+								fmt.Println("Url:", funds[i].URL)
+								fmt.Println("Risk:", funds[i].Risk)
+								fmt.Println("Owned shares:", myFunds[n].Shares)
+								lastValue := funds[i].Value[len(funds[i].Value)-1].Price * myFunds[n].Shares
 								fmt.Printf("Value owned shares: %f\n\n", lastValue)
-								fmt.Printf("\tFrom:    %s\n", fund.Value[0].Date)
-								fmt.Printf("\tTo:      %s\n", fund.Value[len(fund.Value)-1].Date)
-								fmt.Printf("\tYield: $ %f\n", fund.Value[0].Price-fund.Value[len(fund.Value)-1].Price)
+								fmt.Printf("\tFrom:    %s\n", funds[i].Value[0].Date)
+								fmt.Printf("\tTo:      %s\n", funds[i].Value[len(funds[i].Value)-1].Date)
+								fmt.Printf("\tYield: $ %f\n", funds[i].Value[0].Price-funds[i].Value[len(funds[i].Value)-1].Price)
 								return nil
 							}
 						}
@@ -93,10 +93,10 @@ func showData(context string, choosenFunds string) error {
 		}
 	case fundsFile:
 		if choosenFunds == "allFunds" {
-			for _, fund := range funds {
-				fmt.Println("Name:", fund.Name)
-				fmt.Println("Url:", fund.URL)
-				fmt.Println("Risk:", fund.Risk)
+			for i := range funds {
+				fmt.Println("Name:", funds[i].Name)
+				fmt.Println("Url:", funds[i].URL)
+				fmt.Println("Risk:", funds[i].Risk)
 			}
 		} else {
 			exists, err := fundExist(fundsFile, choosenFunds)
@@ -105,11 +105,11 @@ func showData(context string, choosenFunds string) error {
 				return err
 			} else {
 				if exists {
-					for _, fund := range funds {
-						if choosenFunds == fund.Name {
-							fmt.Println("Name:", fund.Name)
-							fmt.Println("Url:", fund.URL)
-							fmt.Println("Risk:", fund.Risk)
+					for i := range funds {
+						if choosenFunds == funds[i].Name {
+							fmt.Println("Name:", funds[i].Name)
+							fmt.Println("Url:", funds[i].URL)
+							fmt.Println("Risk:", funds[i].Risk)
 							return nil
 						}
 					}
@@ -140,8 +140,8 @@ func fundExist(context string, fundName string) (bool, error) {
 		return false, err
 	}
 
-	for _, fund := range funds {
-		if fundName == fund.Name {
+	for i := range funds {
+		if fundName == funds[i].Name {
 			return true, nil
 		}
 	}
@@ -166,12 +166,12 @@ func modifyData(context string, fundName string) error {
 
 		var newMyFunds []Portfolio
 		innerFor := true
-		for _, myFund := range myFunds {
-			if fundName == myFund.Name {
+		for n := range myFunds {
+			if fundName == myFunds[n].Name {
 				var newMyFund Portfolio
-				newMyFund.Name = myFund.Name
-				fmt.Println("Name:", myFund.Name)
-				fmt.Println("Owned shares:", myFund.Shares)
+				newMyFund.Name = myFunds[n].Name
+				fmt.Println("Name:", myFunds[n].Name)
+				fmt.Println("Owned shares:", myFunds[n].Shares)
 				for innerFor {
 					fmt.Println("1- Back")
 					fmt.Println("Plese use the following format.")
@@ -210,7 +210,7 @@ func modifyData(context string, fundName string) error {
 					}
 				}
 			} else {
-				newMyFunds = append(newMyFunds, myFund)
+				newMyFunds = append(newMyFunds, myFunds[n])
 			}
 		}
 
@@ -241,11 +241,11 @@ func modifyData(context string, fundName string) error {
 
 		var newFunds []Fund
 		innerFor := true
-		for _, fund := range funds {
-			if fundName == fund.Name {
+		for i := range funds {
+			if fundName == funds[i].Name {
 				var newFund Fund
-				fmt.Println("Name:", fund.Name)
-				fmt.Println("Url:", fund.URL)
+				fmt.Println("Name:", funds[i].Name)
+				fmt.Println("Url:", funds[i].URL)
 
 				for innerFor {
 					fmt.Println("What do you which to change?")
@@ -270,9 +270,9 @@ func modifyData(context string, fundName string) error {
 							} else {
 								name = strings.TrimSpace(name)
 								newFund.Name = name
-								newFund.URL = fund.URL
-								newFund.Risk = fund.Risk
-								newFund.Value = append(newFund.Value, fund.Value...)
+								newFund.URL = funds[i].URL
+								newFund.Risk = funds[i].Risk
+								newFund.Value = append(newFund.Value, funds[i].Value...)
 
 								newFunds = append(newFunds, newFund)
 								innerFor = false
@@ -284,10 +284,10 @@ func modifyData(context string, fundName string) error {
 								log.Printf("Error reading input: %v", err)
 							} else {
 								url = strings.TrimSpace(url)
-								newFund.Name = fund.Name
+								newFund.Name = funds[i].Name
 								newFund.URL = url
-								newFund.Risk = fund.Risk
-								newFund.Value = append(newFund.Value, fund.Value...)
+								newFund.Risk = funds[i].Risk
+								newFund.Value = append(newFund.Value, funds[i].Value...)
 
 								newFunds = append(newFunds, newFund)
 								innerFor = false
@@ -298,7 +298,7 @@ func modifyData(context string, fundName string) error {
 					}
 				}
 			} else {
-				newFunds = append(newFunds, fund)
+				newFunds = append(newFunds, funds[i])
 			}
 		}
 		updateFunds, err := json.MarshalIndent(newFunds, "", "\t")
@@ -484,11 +484,11 @@ func deleteData(context string, nameFund string) error {
 		}
 
 		var newFunds []Fund
-		for _, fund := range funds {
-			if fund.Name == nameFund {
+		for i := range funds {
+			if funds[i].Name == nameFund {
 				continue
 			} else {
-				newFunds = append(newFunds, fund)
+				newFunds = append(newFunds, funds[i])
 			}
 		}
 		updatedFunds, err := json.MarshalIndent(newFunds, "", "\t")
@@ -516,11 +516,11 @@ func deleteData(context string, nameFund string) error {
 		}
 
 		var newMyFunds []Portfolio
-		for _, myFund := range myFunds {
-			if myFund.Name == nameFund {
+		for i := range myFunds {
+			if myFunds[i].Name == nameFund {
 				continue
 			} else {
-				newMyFunds = append(newMyFunds, myFund)
+				newMyFunds = append(newMyFunds, myFunds[i])
 			}
 		}
 		updatedFunds, err := json.MarshalIndent(newMyFunds, "", "\t")
@@ -593,9 +593,9 @@ func exportData(context string, path string, choosenFunds string) error {
 			}
 
 			var exportFund Fund
-			for _, fund := range funds {
-				if fund.Name == choosenFunds {
-					exportFund = fund
+			for i := range funds {
+				if funds[i].Name == choosenFunds {
+					exportFund = funds[i]
 				}
 			}
 
@@ -627,9 +627,9 @@ func exportData(context string, path string, choosenFunds string) error {
 			}
 
 			var exportFund Portfolio
-			for _, myFund := range myFunds {
-				if myFund.Name == choosenFunds {
-					exportFund = myFund
+			for n := range myFunds {
+				if myFunds[n].Name == choosenFunds {
+					exportFund = myFunds[n]
 				}
 			}
 
