@@ -168,7 +168,7 @@ leave this for last
 TODO/DONE: Change the way i show my funds.
 
 
-TODO: Look for the proper way of dealing with user input, the current way works,
+TODO/DONE: Look for the proper way of dealing with user input, the current way works,
 but i do not like it, look into bufio.Scanner
 
 TODO: Sanitaze user input when dealing with numbers of shares

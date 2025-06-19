@@ -176,6 +176,9 @@ func modifyData(context string, fundName string) error {
 				fmt.Println("Owned shares:", myFund.Shares)
 				for innerFor {
 					fmt.Println("1- Back")
+					fmt.Println("Plese use the following format.")
+					fmt.Println("Dot (.) for thousand separator (12.345)")
+					fmt.Println("Coma (,) for decimal separator (12,3456)")
 					fmt.Println("New ammount of owned shares:")
 					fmt.Print("> ")
 
@@ -188,13 +191,23 @@ func modifyData(context string, fundName string) error {
 							return nil
 						}
 						newShares = strings.TrimSpace(newShares)
-						parsedNewShares, err := strconv.ParseFloat(newShares, 64)
-						if err != nil {
-							log.Printf("Error parsing input: %v", err)
+
+						if strings.Contains(newShares, ".") {
+							newShares = strings.ReplaceAll(newShares, ".", "")
+						}
+
+						if strings.Contains(newShares, ",") {
+							newShares = strings.ReplaceAll(newShares, ",", ".")
+							parsedNewShares, err := strconv.ParseFloat(newShares, 64)
+							if err != nil {
+								log.Printf("Error parsing input: %s : %v", newShares, err)
+							} else {
+								newMyFund.Shares = parsedNewShares
+								newMyFunds = append(newMyFunds, newMyFund)
+								innerFor = false
+							}
 						} else {
-							newMyFund.Shares = parsedNewShares
-							newMyFunds = append(newMyFunds, newMyFund)
-							innerFor = false
+							fmt.Printf("Input: '%s' is the wrong format", newShares)
 						}
 					}
 				}
@@ -360,9 +373,9 @@ func addData(context string, nameFund string) error {
 		myFund := Portfolio{Name: nameFund}
 		for {
 			fmt.Println("DANGER: This data is not check")
-			// NOTE: Allow the user to copy and paste from browser
-			// formats: 12345.1234 | 12345,1234 | 12,345.1234 | 12.345,1234
-			fmt.Println("Do not use comas for thousand separator, use dot as a decimal separator")
+			fmt.Println("Plese use the following format.")
+			fmt.Println("Dot (.) for thousand separator (12.345)")
+			fmt.Println("Coma (,) for decimal separator (12,3456)")
 			fmt.Println("Shares:")
 			fmt.Print("> ")
 
@@ -371,13 +384,22 @@ func addData(context string, nameFund string) error {
 				fmt.Printf("Error reading input: %s", err)
 			} else {
 				shares = strings.TrimSpace(shares)
-				// NOTE: check if the user use comas and or dot
-				parsedShares, err := strconv.ParseFloat(shares, 64)
-				if err != nil {
-					fmt.Printf("Error parsing input: %s : %v", shares, err)
+
+				if strings.Contains(shares, ".") {
+					shares = strings.ReplaceAll(shares, ".", "")
+				}
+
+				if strings.Contains(shares, ",") {
+					shares = strings.ReplaceAll(shares, ",", ".")
+					parsedShares, err := strconv.ParseFloat(shares, 64)
+					if err != nil {
+						fmt.Printf("Error parsing input: %s : %v", shares, err)
+					} else {
+						myFund.Shares = parsedShares
+						break
+					}
 				} else {
-					myFund.Shares = parsedShares
-					break
+					fmt.Printf("Input: '%s' is the wrong format", shares)
 				}
 			}
 		}
