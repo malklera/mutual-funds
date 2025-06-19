@@ -187,7 +187,7 @@ func modifyData(context string, fundName string) error {
 						if newShares == "1" {
 							return nil
 						}
-						newShares = strings.TrimSuffix(newShares, "\n")
+						newShares = strings.TrimSpace(newShares)
 						parsedNewShares, err := strconv.ParseFloat(newShares, 64)
 						if err != nil {
 							log.Printf("Error parsing input: %v", err)
@@ -248,7 +248,7 @@ func modifyData(context string, fundName string) error {
 					if err != nil {
 						log.Printf("Error reading input: %v", err)
 					} else {
-						opt = strings.TrimSuffix(opt, "\n")
+						opt = strings.TrimSpace(opt)
 
 						switch opt {
 						case "1":
@@ -257,7 +257,7 @@ func modifyData(context string, fundName string) error {
 							if err != nil {
 								log.Printf("Error reading input: %v", err)
 							} else {
-								name = strings.TrimSuffix(name, "\n")
+								name = strings.TrimSpace(name)
 								newFund.Name = name
 								newFund.URL = fund.URL
 								newFund.Risk = fund.Risk
@@ -272,7 +272,7 @@ func modifyData(context string, fundName string) error {
 							if err != nil {
 								log.Printf("Error reading input: %v", err)
 							} else {
-								url = strings.TrimSuffix(url, "\n")
+								url = strings.TrimSpace(url)
 								newFund.Name = fund.Name
 								newFund.URL = url
 								newFund.Risk = fund.Risk
@@ -322,7 +322,7 @@ func addData(context string, nameFund string) error {
 			if err != nil {
 				fmt.Printf("Error reading input: %s", err)
 			} else {
-				url = strings.TrimSuffix(url, "\n")
+				url = strings.TrimSpace(url)
 				fund.URL = url
 				break
 			}
@@ -370,7 +370,7 @@ func addData(context string, nameFund string) error {
 			if err != nil {
 				fmt.Printf("Error reading input: %s", err)
 			} else {
-				shares = strings.TrimSuffix(shares, "\n")
+				shares = strings.TrimSpace(shares)
 				// NOTE: check if the user use comas and or dot
 				parsedShares, err := strconv.ParseFloat(shares, 64)
 				if err != nil {
@@ -425,7 +425,7 @@ func deleteData(context string, nameFund string) error {
 		if err != nil {
 			fmt.Printf("Error reading input: %s", err)
 		} else {
-			opt = strings.TrimSuffix(opt, "\n")
+			opt = strings.TrimSpace(opt)
 			switch opt {
 			case "y", "Y":
 				confirmation = false

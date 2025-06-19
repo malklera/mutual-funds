@@ -25,7 +25,7 @@ func menu() {
 		if err != nil {
 			fmt.Printf("Error reading input: %v\n", err)
 		} else {
-			opt = strings.TrimSuffix(opt, "\n")
+			opt = strings.TrimSpace(opt)
 			switch opt {
 			case "1":
 				optionsMenu(myFundsFile)
@@ -53,7 +53,7 @@ func menu() {
 					if err != nil {
 						fmt.Printf("Error reading input: %v\n", err)
 					} else {
-						opt = strings.TrimSuffix(opt, "\n")
+						opt = strings.TrimSpace(opt)
 						switch opt {
 						case "y", "Y":
 							os.Exit(0)
@@ -90,7 +90,7 @@ func optionsMenu(context string) {
 		if err != nil {
 			fmt.Printf("Error reading input: %v\n", err)
 		} else {
-			opt = strings.TrimSuffix(opt, "\n")
+			opt = strings.TrimSpace(opt)
 			switch opt {
 			case "1":
 				innerFor := true
@@ -105,7 +105,7 @@ func optionsMenu(context string) {
 					if err2 != nil {
 						fmt.Printf("Error reading input: %v\n", err2)
 					} else {
-						opt2 = strings.TrimSuffix(opt2, "\n")
+						opt2 = strings.TrimSpace(opt2)
 						switch opt2 {
 						case "1":
 							menuShow(context, "allFunds")
@@ -138,7 +138,7 @@ func optionsMenu(context string) {
 					if err2 != nil {
 						fmt.Printf("Error reading input: %v\n", err2)
 					} else {
-						opt2 = strings.TrimSuffix(opt2, "\n")
+						opt2 = strings.TrimSpace(opt2)
 						switch opt2 {
 						case "1":
 							menuExport(context, "allFunds")
@@ -190,7 +190,7 @@ func menuShow(context string, choosenFunds string) {
 		if err != nil {
 			fmt.Printf("Error reading input: %v\n", err)
 		} else {
-			opt = strings.TrimSuffix(opt, "\n")
+			opt = strings.TrimSpace(opt)
 			switch opt {
 			case "1":
 				switch choosenFunds {
@@ -232,7 +232,7 @@ func menuExport(context string, choosenFunds string) {
 		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
-		opt = strings.TrimSuffix(opt, "\n")
+		opt = strings.TrimSpace(opt)
 		if err != nil {
 			fmt.Printf("Error reading input: %v\n", err)
 		} else {
@@ -267,7 +267,7 @@ func subMenuExport(context string, choosenFunds string) {
 		if err != nil {
 			fmt.Printf("Error reading input: %v\n", err)
 		} else {
-			path = strings.TrimSuffix(path, "\n")
+			path = strings.TrimSpace(path)
 			if path == "1" {
 				return
 			} else {
@@ -308,7 +308,7 @@ func menuModify(context string) {
 		fmt.Print("> ")
 
 		opt, err := reader.ReadString('\n')
-		opt = strings.TrimSuffix(opt, "\n")
+		opt = strings.TrimSpace(opt)
 		if err != nil {
 			fmt.Printf("Error reading input: %v\n", err)
 		} else {
@@ -350,7 +350,7 @@ func subMenuModify(context string) {
 		if err != nil {
 			fmt.Printf("Error reading input: %v\n", err)
 		} else {
-			opt = strings.TrimSuffix(opt, "\n")
+			opt = strings.TrimSpace(opt)
 			switch opt {
 			case "1":
 				return
@@ -400,7 +400,7 @@ func subMenuAdd(context string) {
 		if err != nil {
 			fmt.Printf("Error reading input: %v\n", err)
 		} else {
-			opt = strings.TrimSuffix(opt, "\n")
+			opt = strings.TrimSpace(opt)
 			switch opt {
 			case "1":
 				return
@@ -450,7 +450,7 @@ func subMenuDelete(context string) {
 		if err != nil {
 			fmt.Printf("Error reading input: %v\n", err)
 		} else {
-			opt = strings.TrimSuffix(opt, "\n")
+			opt = strings.TrimSpace(opt)
 			switch opt {
 			case "1":
 				return
