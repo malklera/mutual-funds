@@ -149,8 +149,6 @@ func fundExist(context string, fundName string) (bool, error) {
 }
 
 func modifyData(context string, fundName string) error {
-	// WARN: if i modified the fundsFile it will interfere with my checks of last
-	// modified time, for now let it...
 	var reader = bufio.NewReader(os.Stdin)
 	switch context {
 	case myFundsFile:

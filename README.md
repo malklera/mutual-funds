@@ -176,6 +176,14 @@ TODO/DONE: Sanitaze user input when dealing with numbers of shares
 TODO/DONE: When adding a new fund ask for url only, and get the info, show to the user
 and ask if accept to add it
 
+TODO: Show yield as a percentage all time, last month, etc.
+
+TODO: Check how to work with the default time format for go
+
+TODO: Export to a calculus sheet, pdf table
+
+TODO: Show on a graphical table with some color
+
 TODO: Make it pretty with some cli framework, melkey show one
 
 TODO: After a couple of months compare my calculation of yield with the one on the
