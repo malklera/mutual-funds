@@ -8,8 +8,7 @@ import (
 const (
 	fundsFile       = "funds.json"
 	myFundsFile     = "myFunds.json"
-	// WARN: change it back to 17
-	hourCloseMarket = 20
+	hourCloseMarket = 17
 )
 
 func main() {
