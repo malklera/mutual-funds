@@ -22,6 +22,7 @@ by doing it from chromedp instead of strait js from the console of devtools.
 New approach:
 Manually get the id, name, and complete url of each mutual fund available on the web, 
 put all that data to a .json file, and make the program read from it.
+
 Discard this, i do not care about the id, i got manually the name and url of each
 mutual fund, and put it on a []byte variable inside of baseFunds.go, this will take
 care of creating the funds.json file to be used by the program
@@ -37,12 +38,14 @@ I have to check that the name I give and the one display on the page are the sam
 
 Name display on the page:
 
+```
 <h1
   data-testid="titleDetailDesktop"
   class="sc-aXZVg jbWCFw sc-dISpDn dlSiwb"
 >
 Name fund
 </h1>
+```
 
 Compare that the "Name fund" is the same of the one from the json,
 if the website change the relation url/fund I need to know.
@@ -54,25 +57,29 @@ Only show something if they are not the same.
 Risk? But only the first time, this do not change, or did it change? i do not know,
 I will check each time, if the risk is different from the json, i update it, deal
 with the risk not existing the first time i run the program
+```
 <p
   data-testid="fundRiskDetailName"
   class="sc-aXZVg hLnzCR sc-gRtvSG bydNqC"
 >
   Type
 </p>
+```
 
 Cuotapartes
+```
 <h3
   data-testid="currentShareValueType"
   class="sc-aXZVg dMxiJX"
 >
   $ 14.563,697
 </h3>
+```
 Get ride of "$ " and convert the rest to a float64, see how go deal with "." and ",",
 this will appended to the slices if it already exist or initialize the first run
 I just thought of something, i want to know when i get the value, the value slice has to
 be a map instead, where i have date and value
-I manually erase "$ " and ".", then reempalce the "," by a ".", then i can convert
+I manually erase "$ " and ".", then reemplace the "," by a ".", then i can convert
 the string to a float64
 
 Another where I put the downloaded content to an actual data structure, check
@@ -81,11 +88,13 @@ what type of data structure I want to use.
 I choose to make a couple of struct to dealt with all the info.
 Then write it down as a .json file
 
-TODO: when running saveValues() I have to check the date of the last element
+TODO/DONE: when running saveValues() I have to check the date of the last element
 of each fund, if the current date is the same as the last element of the Value slice
 then I check if they are different I update that and not append a new one.
+
 Where do i run this check??
-I want  to run this program each time i boot my pc, then run it agan after the
+
+I want  to run this program each time i boot my pc, then run it again after the
 market close, but some day i may not be able to do so, think how and where do the
 checks.
 
@@ -103,10 +112,11 @@ First menu will be
 
 Both will call upon the following menu, the difference will be that "My Funds"
 need its own .json file where i have a list of funds, only the name, when i call
-upon the functions below i can do it with either with the slice of funds or an empty slice
-if the slice is empty the options below act upon the whole funds.json, if the slice is
+upon the functions below i can do it with either with the slice of funds or an empty slice.
+
+If the slice is empty the options below act upon the whole funds.json, if the slice is
 non empty show and export will go through funds.json and only grab the ones in the
-slice, on modify instead it will modify my-funds.json instead
+slice, on modify instead it will modify my-funds.json instead.
 
 DONE: The same way i create the first .json file, i have to create this myFunds.json
 file the first time empty
