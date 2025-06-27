@@ -13,7 +13,9 @@ Another where I download the specific content that I want as an html.
 This is not necessary
 
 I tried to get the specifics url from each element of the table from:
+
 https://www.santander.com.ar/personas/inversiones/informacion-fondos#/
+
 But I run into problems, only the first url gets saved, maybe in the future I will try
 by doing it from chromedp instead of strait js from the console of devtools.
 
